@@ -67,6 +67,8 @@ public class File {
                 .build();
     }
 
+
+    // 🔥하나의 컬럼에 string 배열을 담는 코드 ❗️
     @Converter
     public static class ListStringConverter implements AttributeConverter<List<String>, String>{
         @Override
@@ -76,7 +78,6 @@ public class File {
             }
             return String.join(",", attribute);
         }
-
         @Override
         public List<String> convertToEntityAttribute(String dbData) {
             if (dbData == null || dbData.trim().isEmpty()) {
