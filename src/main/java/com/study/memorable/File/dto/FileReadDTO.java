@@ -21,7 +21,7 @@ public class FileReadDTO {
     private String content;
     private List<String> keyword1;
     private List<String> keyword2;
-    private LocalDateTime date;
+    private LocalDateTime created_date;
 
     public static FileReadDTO toDTO(File file){
         return FileReadDTO.builder()
@@ -31,7 +31,7 @@ public class FileReadDTO {
                 .content(file.getContent())
                 .keyword1(file.getKeyword1())
                 .keyword2(file.getKeyword2())
-                .date(LocalDateTime.now())
+                .created_date(LocalDateTime.now())
                 .build();
     }
 

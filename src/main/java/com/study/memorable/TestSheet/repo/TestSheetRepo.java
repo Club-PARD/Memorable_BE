@@ -1,4 +1,7 @@
 package com.study.memorable.TestSheet.repo;
 
-public interface TestSheetRepo {
+import com.study.memorable.TestSheet.entity.TestSheet;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TestSheetRepo extends JpaRepository<TestSheet, Long> {
 }

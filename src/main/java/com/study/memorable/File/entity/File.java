@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import com.study.memorable.config.ListStringConverter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,17 +28,16 @@ public class File {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String file_name;
     private String category;
 
     @Column(columnDefinition = "TEXT")
     private String content;
-//    @Column(columnDefinition = "TEXT")
+    //    @Column(columnDefinition = "TEXT")
 //    @ElementCollection
     @Convert(converter = ListStringConverter.class)
     private List<String> keyword1;
-//    @ElementCollection
+    //    @ElementCollection
 //    @Column(columnDefinition = "TEXT")
     @Convert(converter = ListStringConverter.class)
     private List<String> keyword2;
@@ -56,7 +56,7 @@ public class File {
 //    @OneToMany(mappedBy = "file")
 //    private List<WrongSheet> wrongSheets;
 
-    public File toEntity(FileCreateDTO dto){
+    public File toEntity(FileCreateDTO dto) {
         return File.builder()
                 .file_name(dto.getFile_name())
                 .category(dto.getCategory())
@@ -66,27 +66,5 @@ public class File {
                 .date(LocalDateTime.now())
                 .build();
     }
-
-
-    // 🔥하나의 컬럼에 string 배열을 담는 코드 ❗️
-    @Converter
-    public static class ListStringConverter implements AttributeConverter<List<String>, String>{
-        @Override
-        public String convertToDatabaseColumn(List<String> attribute) {
-            if (attribute == null || attribute.isEmpty()) {
-                return "";
-            }
-            return String.join(",", attribute);
-        }
-        @Override
-        public List<String> convertToEntityAttribute(String dbData) {
-            if (dbData == null || dbData.trim().isEmpty()) {
-                return new ArrayList<>();
-            }
-            return Arrays.asList(dbData.split("\\s*,\\s*"));
-        }
-    }
-
-
 
 }
