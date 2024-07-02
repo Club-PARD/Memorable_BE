@@ -20,7 +20,6 @@ public class WrongSheetReadDTO {
     private String questions2;
     private String answers2;
     private boolean bookmark;
-    private Long test_id;
     private LocalDateTime created_date;
 
     public static WrongSheetReadDTO toDTO(WrongSheet wrongSheet) {
@@ -31,7 +30,6 @@ public class WrongSheetReadDTO {
                 .questions2(wrongSheet.getQuestions2())
                 .answers2(wrongSheet.getAnswers2())
                 .bookmark(wrongSheet.isBookmark())
-                .test_id(wrongSheet.getTest_id())
                 .created_date(wrongSheet.getCreated_date())
                 .build();
     }

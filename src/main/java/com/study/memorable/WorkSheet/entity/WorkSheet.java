@@ -2,7 +2,6 @@ package com.study.memorable.WorkSheet.entity;
 
 import com.study.memorable.File.entity.File;
 import com.study.memorable.WorkSheet.dto.WorkSheetCreateDTO;
-import com.study.memorable.WorkSheet.service.WorkSheetService;
 import com.study.memorable.config.ListStringConverter;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +25,7 @@ public class WorkSheet {
 
     @Convert(converter = ListStringConverter.class)
     private List<String> answer2;
+
     private boolean bookmark;
     private boolean isReExtracted;
     private boolean isCompleteAllBlanks;
@@ -34,6 +34,11 @@ public class WorkSheet {
     @ManyToOne
     @JoinColumn(name = "file_id")
     private File file;
+
+    // WorkSheet 클릭 로그 관련 코드
+    @OneToMany(mappedBy = "workSheet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkSheetClickLog> workSheetClickLogs;
+
 
     public WorkSheet toEntity(WorkSheetCreateDTO dto) {
         return WorkSheet.builder()

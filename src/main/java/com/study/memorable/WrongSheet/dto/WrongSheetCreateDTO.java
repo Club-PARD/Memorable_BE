@@ -13,6 +13,5 @@ public class WrongSheetCreateDTO {
     private String questions2;
     private String answers2;
     private boolean bookmark;
-    private Long test_id;
     private LocalDateTime created_date;
 }

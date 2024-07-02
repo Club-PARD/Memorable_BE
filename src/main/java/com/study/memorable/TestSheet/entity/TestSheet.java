@@ -1,23 +1,21 @@
 package com.study.memorable.TestSheet.entity;
 
+import com.study.memorable.File.entity.File;
 import com.study.memorable.TestSheet.dto.TestSheetCreateDTO;
 import com.study.memorable.TestSheet.dto.TestSheetReadDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.study.memorable.WrongSheet.entity.WrongSheet;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class TestSheet {
 
     @Id
@@ -29,12 +27,17 @@ public class TestSheet {
     private String questions2;
     private String answers2;
     private String wrongAnswers;
-
-//    private Long file_id;
     private boolean isCompleteTest;
     private boolean isNewTest;
     private String score;
     private LocalDateTime created_date;
+
+    @ManyToOne
+    @JoinColumn(name = "file_id")
+    private File file;
+
+    @OneToMany(mappedBy = "testSheet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WrongSheet> wrongSheet;
 
     public TestSheet toEntity(TestSheetCreateDTO dto) {
         return TestSheet.builder()

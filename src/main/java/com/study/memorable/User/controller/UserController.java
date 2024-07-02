@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/study")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
     @PostMapping("")

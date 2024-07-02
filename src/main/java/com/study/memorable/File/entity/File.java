@@ -6,10 +6,7 @@ import com.study.memorable.User.entity.User;
 import com.study.memorable.WorkSheet.entity.WorkSheet;
 import com.study.memorable.WrongSheet.entity.WrongSheet;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import com.study.memorable.config.ListStringConverter;
 
 import java.time.LocalDateTime;
@@ -20,6 +17,7 @@ import java.util.List;
 @Embeddable
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -50,11 +48,8 @@ public class File {
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkSheet> workSheets;
 
-//    @OneToMany(mappedBy = "file")
-//    private List<TestSheet> testSheets;
-//
-//    @OneToMany(mappedBy = "file")
-//    private List<WrongSheet> wrongSheets;
+    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TestSheet> testSheets;
 
     public File toEntity(FileCreateDTO dto) {
         return File.builder()

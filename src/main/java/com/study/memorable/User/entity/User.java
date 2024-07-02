@@ -2,7 +2,7 @@ package com.study.memorable.User.entity;
 
 import com.study.memorable.User.dto.UserCreateDTO;
 import com.study.memorable.File.entity.File;
-import com.study.memorable.User.dto.UserReadDTO;
+import com.study.memorable.WorkSheet.entity.WorkSheetClickLog;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,7 +27,12 @@ public class User {
 //    private int authorization_code;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<File> file;
+    private List<File> files;
+
+    // WorkSheet 클릭 로그 관련 코드
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkSheetClickLog> workSheetClickLogs;
+
 
     public User toEntity(UserCreateDTO dto){
         return User.builder()

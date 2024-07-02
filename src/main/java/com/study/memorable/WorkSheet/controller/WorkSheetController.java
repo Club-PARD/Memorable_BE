@@ -5,10 +5,7 @@ import com.study.memorable.WorkSheet.dto.WorkSheetReadDTO;
 import com.study.memorable.WorkSheet.service.WorkSheetService;
 import lombok.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +24,21 @@ public class WorkSheetController {
     @GetMapping("")
     public List<WorkSheetReadDTO> findAll(){
         return workSheetService.findAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id){
+        workSheetService.delete(id);
+        return "잘 삭제됨!";
+    }
+
+    @PostMapping("/logWorkSheetClick")
+    public void logWorkSheetClick(@RequestParam Long userId, @RequestParam Long workSheetId) {
+        workSheetService.logWorkSheetClick(userId, workSheetId);
+    }
+
+    @GetMapping("/lastClickedWorkSheet")
+    public Long getLastClickedWorkSheet(@RequestParam Long userId) {
+        return workSheetService.getLastClickedWorkSheetId(userId);
     }
 }

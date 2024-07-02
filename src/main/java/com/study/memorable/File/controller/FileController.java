@@ -49,4 +49,10 @@ public class FileController {
     public List<FileReadDTO> findAll() {
         return fileService.findAll();
     }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id){
+        fileService.deleteById(id);
+        return "잘 삭제됨!";
+    }
 }

@@ -3,10 +3,7 @@ package com.study.memorable.TestSheet.controller;
 import com.study.memorable.TestSheet.dto.TestSheetCreateDTO;
 import com.study.memorable.TestSheet.service.TestSheetService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,13 +13,13 @@ public class TestSheetController {
     private final TestSheetService testSheetService;
 
     @PostMapping("")
-    public String createTestSheet(TestSheetCreateDTO dto){
-        testSheetService.createTestSheet(dto);
+    public String createTestSheet(@RequestBody TestSheetCreateDTO dto, @RequestParam Long fileId) {
+        testSheetService.createTestSheet(dto, fileId);
         return "시험지 생성됨!";
     }
 
     @GetMapping("")
-    public void findAll(){
+    public void findAll() {
         testSheetService.findAll();
     }
 }

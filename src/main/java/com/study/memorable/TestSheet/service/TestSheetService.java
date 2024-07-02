@@ -1,5 +1,7 @@
 package com.study.memorable.TestSheet.service;
 
+import com.study.memorable.File.entity.File;
+import com.study.memorable.File.repo.FileRepo;
 import com.study.memorable.TestSheet.dto.TestSheetCreateDTO;
 import com.study.memorable.TestSheet.dto.TestSheetReadDTO;
 import com.study.memorable.TestSheet.entity.TestSheet;
@@ -14,9 +16,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TestSheetService {
     private final TestSheetRepo testSheetRepo;
+    private final FileRepo fileRepo;
 
-    public void createTestSheet(TestSheetCreateDTO dto){
-        testSheetRepo.save(new TestSheet().toEntity(dto));
+    public TestSheetReadDTO createTestSheet(TestSheetCreateDTO dto, Long fileId) {
+        File file = fileRepo.findById(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found"));
+
+        TestSheet testSheet = new TestSheet().toEntity(dto);
+        testSheet.setFile(file);
+
+        TestSheet savedTestSheet = testSheetRepo.save(testSheet);
+        return TestSheetReadDTO.toDTO(savedTestSheet);
     }
 
     public List<TestSheetReadDTO> findAll(){

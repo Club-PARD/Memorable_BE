@@ -1,11 +1,10 @@
 package com.study.memorable.WrongSheet.entity;
 
+import com.study.memorable.File.entity.File;
+import com.study.memorable.TestSheet.entity.TestSheet;
 import com.study.memorable.WrongSheet.dto.WrongSheetCreateDTO;
 import com.study.memorable.WrongSheet.dto.WrongSheetReadDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,9 +27,11 @@ public class WrongSheet {
     private String questions2;
     private String answers2;
     private boolean bookmark;
-
-    private Long test_id;
     private LocalDateTime created_date;
+
+    @ManyToOne
+    @JoinColumn(name = "testSheet_id")
+    private TestSheet testSheet;
 
     public WrongSheet toEntity(WrongSheetCreateDTO dto) {
         return WrongSheet.builder()
@@ -39,7 +40,6 @@ public class WrongSheet {
                 .questions2(dto.getQuestions2())
                 .answers2(dto.getAnswers2())
                 .bookmark(dto.isBookmark())
-                .test_id(dto.getTest_id())
                 .created_date(LocalDateTime.now())
                 .build();
     }
