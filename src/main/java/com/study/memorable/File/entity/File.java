@@ -41,15 +41,15 @@ public class File {
 //    @Column(columnDefinition = "TEXT")
     @Convert(converter = ListStringConverter.class)
     private List<String> keyword2;
-    private LocalDateTime date;
+    private LocalDateTime create_date;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-//
-//    @OneToMany(mappedBy = "file")
-//    private List<WorkSheet> workSheets;
-//
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkSheet> workSheets;
+
 //    @OneToMany(mappedBy = "file")
 //    private List<TestSheet> testSheets;
 //
@@ -63,7 +63,7 @@ public class File {
                 .content(dto.getContent())
                 .keyword1(dto.getKeyword1())
                 .keyword2(dto.getKeyword2())
-                .date(LocalDateTime.now())
+                .create_date(LocalDateTime.now())
                 .build();
     }
 

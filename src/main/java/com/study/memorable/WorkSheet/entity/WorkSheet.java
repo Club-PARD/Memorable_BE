@@ -26,12 +26,14 @@ public class WorkSheet {
 
     @Convert(converter = ListStringConverter.class)
     private List<String> answer2;
-
     private boolean bookmark;
-    private int file_id;
     private boolean isReExtracted;
     private boolean isCompleteAllBlanks;
     private LocalDateTime created_date;
+
+    @ManyToOne
+    @JoinColumn(name = "file_id")
+    private File file;
 
     public WorkSheet toEntity(WorkSheetCreateDTO dto) {
         return WorkSheet.builder()

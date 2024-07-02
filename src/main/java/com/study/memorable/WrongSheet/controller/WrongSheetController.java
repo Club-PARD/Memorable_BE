@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/ws")
+@RequestMapping("/wrongsheet")
 public class WrongSheetController {
 
     private final WrongSheetService wrongSheetService;

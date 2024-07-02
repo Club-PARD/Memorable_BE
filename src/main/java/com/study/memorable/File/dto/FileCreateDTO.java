@@ -12,5 +12,5 @@ public class FileCreateDTO {
     private String content;
     private List<String> keyword1;
     private List<String> keyword2;
-    private LocalDateTime date;
+    private LocalDateTime create_date;
 }

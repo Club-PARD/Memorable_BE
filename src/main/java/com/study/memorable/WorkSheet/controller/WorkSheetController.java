@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("ws")
+@RequestMapping("worksheet")
 public class WorkSheetController {
     private final WorkSheetService workSheetService;
 

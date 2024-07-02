@@ -1,14 +1,13 @@
 package com.study.memorable.User.entity;
 
 import com.study.memorable.User.dto.UserCreateDTO;
+import com.study.memorable.File.entity.File;
 import com.study.memorable.User.dto.UserReadDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,15 +23,18 @@ public class User {
     private String email;
     private String given_name;
     private String family_name;
-    private LocalDateTime date;
+    private LocalDateTime create_date;
 //    private int authorization_code;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<File> file;
 
     public User toEntity(UserCreateDTO dto){
         return User.builder()
                 .email(dto.getEmail())
                 .given_name(dto.getGiven_name())
                 .family_name(dto.getFamily_name())
-                .date(LocalDateTime.now())
+                .create_date(LocalDateTime.now())
                 .build();
     }
 
