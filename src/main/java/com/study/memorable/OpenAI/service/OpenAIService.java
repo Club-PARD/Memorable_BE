@@ -29,17 +29,17 @@ public class OpenAIService {
     public List<String> keywords;
 
 
-//    public int getTokenCount(String text) throws Exception {
-//
-//
-//
-//        // Prepare the request object
-//        ChatGPTRequest request = new ChatGPTRequest(model, text);
-//
-//        // Call the OpenAI API
-//        ChatGPTResponse response = restTemplate.postForObject(apiURL, request, ChatGPTResponse.class);
-//
-//        // Get the token count from the response
-//        return response.getUsage().getPrompt_tokens();
-//    }
+    public int getTokenCount(String text) throws Exception {
+
+
+
+        // Prepare the request object
+        ChatGPTRequest request = new ChatGPTRequest(model, text);
+
+        // Call the OpenAI API
+        ChatGPTResponse response = restTemplate.postForObject(apiURL, request, ChatGPTResponse.class);
+
+        // Get the token count from the response
+        return response.getUsage().getPrompt_tokens();
+    }
 }

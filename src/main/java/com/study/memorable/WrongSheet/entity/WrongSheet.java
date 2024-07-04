@@ -1,14 +1,9 @@
 package com.study.memorable.WrongSheet.entity;
 
-import com.study.memorable.File.entity.File;
 import com.study.memorable.TestSheet.entity.TestSheet;
 import com.study.memorable.WrongSheet.dto.WrongSheetCreateDTO;
-import com.study.memorable.WrongSheet.dto.WrongSheetReadDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class WrongSheet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,20 +23,20 @@ public class WrongSheet {
     private String questions2;
     private String answers2;
     private boolean bookmark;
-    private LocalDateTime created_date;
+    private LocalDateTime wrongsheetCreate_date;
 
     @ManyToOne
     @JoinColumn(name = "testSheet_id")
     private TestSheet testSheet;
 
-    public WrongSheet toEntity(WrongSheetCreateDTO dto) {
+    public static WrongSheet toEntity(WrongSheetCreateDTO dto, TestSheet testSheet) {
         return WrongSheet.builder()
                 .questions1(dto.getQuestions1())
                 .answers1(dto.getAnswers1())
                 .questions2(dto.getQuestions2())
                 .answers2(dto.getAnswers2())
-                .bookmark(dto.isBookmark())
-                .created_date(LocalDateTime.now())
+                .wrongsheetCreate_date(LocalDateTime.now())
+                .testSheet(testSheet)
                 .build();
     }
 }

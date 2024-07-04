@@ -1,6 +1,5 @@
 package com.study.memorable.User.dto;
 
-
 import com.study.memorable.User.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,19 +13,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserReadDTO {
-    private Long id;
+    private String identifier; // Remains the same
     private String email;
-    private String given_name;
-    private String family_name;
-    private LocalDateTime create_date;
+    private String givenName;
+    private String familyName;
+    private LocalDateTime created_date;
 
-    public static UserReadDTO toDTO(User user){
+    public static UserReadDTO toDTO(User user) {
         return UserReadDTO.builder()
-                .id(user.getId())
+                .identifier(user.getId())
                 .email(user.getEmail())
-                .given_name(user.getGiven_name())
-                .family_name(user.getFamily_name())
-                .create_date(user.getCreate_date())
+                .givenName(user.getGivenName())
+                .familyName(user.getFamilyName())
+                .created_date(user.getCreated_date())
                 .build();
     }
 }

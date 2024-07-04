@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -30,24 +31,10 @@ public class WorkSheet {
     private boolean isReExtracted;
     private boolean isCompleteAllBlanks;
     private LocalDateTime created_date;
+    private LocalDateTime recentDate;
 
     @ManyToOne
     @JoinColumn(name = "file_id")
     private File file;
 
-    // WorkSheet 클릭 로그 관련 코드
-    @OneToMany(mappedBy = "workSheet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkSheetClickLog> workSheetClickLogs;
-
-
-    public WorkSheet toEntity(WorkSheetCreateDTO dto) {
-        return WorkSheet.builder()
-                .answer1(dto.getAnswer1())
-                .answer2(dto.getAnswer2())
-                .bookmark(dto.isBookmark())
-                .isReExtracted(dto.isReExtracted())
-                .isCompleteAllBlanks(dto.isCompleteAllBlanks())
-                .created_date(LocalDateTime.now())
-                .build();
-    }
 }

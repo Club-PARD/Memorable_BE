@@ -2,14 +2,10 @@ package com.study.memorable.User.dto;
 
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
-public class UserCreateDTO
-{
+public class UserCreateDTO {
+    private String identifier;
     private String email;
-    private String given_name;
-    private String family_name;
-    private LocalDateTime date;
-//    private int authorization_code;
+    private String givenName;
+    private String familyName;
 }

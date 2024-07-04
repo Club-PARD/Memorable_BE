@@ -14,30 +14,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TestSheetReadDTO {
     private Long id;
-
-    private String questions1;
-    private String answers1;
-    private String questions2;
-    private String answers2;
-    private String wrongAnswers;
-
-    //    private Long file_id;
-    private boolean isCompleteTest;
-    private boolean isNewTest;
-    private String score;
+    private boolean bookmark;
+    private String name;
+    private String category;
     private LocalDateTime created_date;
 
-    public static TestSheetReadDTO toDTO(TestSheet testSheet){
+    public static TestSheetReadDTO toDTO(TestSheet testSheet) {
         return TestSheetReadDTO.builder()
                 .id(testSheet.getId())
-                .questions1(testSheet.getQuestions1())
-                .answers1(testSheet.getAnswers1())
-                .questions2(testSheet.getQuestions2())
-                .answers2(testSheet.getAnswers2())
-                .wrongAnswers(testSheet.getWrongAnswers())
-                .isCompleteTest(testSheet.isCompleteTest())
-                .isNewTest(testSheet.isNewTest())
-                .score(testSheet.getScore())
+                .bookmark(testSheet.isBookmark())
+                .name(testSheet.getFile().getFile_name())
+                .category(testSheet.getFile().getCategory())
                 .created_date(LocalDateTime.now())
                 .build();
     }

@@ -2,24 +2,21 @@ package com.study.memorable.TestSheet.controller;
 
 import com.study.memorable.TestSheet.dto.TestSheetCreateDTO;
 import com.study.memorable.TestSheet.service.TestSheetService;
+import com.study.memorable.TestSheet.dto.TestSheetReadDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/ts")
+@RequestMapping("/api/testsheets")
 public class TestSheetController {
 
     private final TestSheetService testSheetService;
 
     @PostMapping("")
-    public String createTestSheet(@RequestBody TestSheetCreateDTO dto, @RequestParam Long fileId) {
-        testSheetService.createTestSheet(dto, fileId);
-        return "시험지 생성됨!";
-    }
-
-    @GetMapping("")
-    public void findAll() {
-        testSheetService.findAll();
+    public TestSheetReadDTO createTestSheet(@RequestBody TestSheetCreateDTO dto) {
+        return testSheetService.createTestSheet(dto);
     }
 }

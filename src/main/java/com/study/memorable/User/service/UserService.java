@@ -5,8 +5,8 @@ import com.study.memorable.User.dto.UserReadDTO;
 import com.study.memorable.User.entity.User;
 import com.study.memorable.User.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.metamodel.internal.MemberResolver;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,25 +17,29 @@ public class UserService {
     private final UserRepo userRepo;
 
     public void createUser(UserCreateDTO dto){
-        userRepo.save(new User().toEntity(dto));
+        userRepo.save(User.toEntity(dto));
     }
 
-    public List<UserReadDTO> findAll(){
+    public List<UserReadDTO> findAll() {
         return userRepo.findAll()
                 .stream()
                 .map(UserReadDTO::toDTO)
                 .collect(Collectors.toList());
-
     }
 
-    public UserReadDTO findUserById(Long id){
-        return new UserReadDTO().toDTO(userRepo.findById(id).orElseThrow());
+    public UserReadDTO findUserById(String id) {
+        User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return UserReadDTO.toDTO(user);
     }
 
-    public void deleteById(Long id){
-        userRepo.deleteById(id);
+    public void updateUser(UserReadDTO dto, String id) {
+        User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.updateFromDTO(dto);
     }
 
-
-
+    @Transactional
+    public void deleteUser(String id) {
+        User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        userRepo.delete(user);
+    }
 }

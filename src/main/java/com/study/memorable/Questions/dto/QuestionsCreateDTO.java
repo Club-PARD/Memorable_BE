@@ -1,15 +1,17 @@
-package com.study.memorable.TestSheet.dto;
+package com.study.memorable.Questions.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestSheetCreateDTO {
+public class QuestionsCreateDTO {
+    private String questions;
+    private String answers;
+    private String user_answers;
     private Long fileId;
-    private boolean bookmark;
 }

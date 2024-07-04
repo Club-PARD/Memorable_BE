@@ -18,21 +18,11 @@ public class TestSheetService {
     private final TestSheetRepo testSheetRepo;
     private final FileRepo fileRepo;
 
-    public TestSheetReadDTO createTestSheet(TestSheetCreateDTO dto, Long fileId) {
-        File file = fileRepo.findById(fileId)
-                .orElseThrow(() -> new RuntimeException("File not found"));
-
-        TestSheet testSheet = new TestSheet().toEntity(dto);
-        testSheet.setFile(file);
-
-        TestSheet savedTestSheet = testSheetRepo.save(testSheet);
-        return TestSheetReadDTO.toDTO(savedTestSheet);
+    public TestSheetReadDTO createTestSheet(TestSheetCreateDTO dto) {
+        File file = fileRepo.findById(dto.getFileId()).orElseThrow(() -> new RuntimeException("File not found"));
+        TestSheet testSheet = TestSheet.toEntity(dto, file);
+        testSheetRepo.save(testSheet);
+        return TestSheetReadDTO.toDTO(testSheet);
     }
-
-    public List<TestSheetReadDTO> findAll(){
-        return testSheetRepo.findAll()
-                .stream()
-                .map(TestSheetReadDTO::toDTO)
-                .collect(Collectors.toList());
-    }
+    
 }

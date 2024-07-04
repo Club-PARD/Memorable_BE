@@ -1,48 +1,23 @@
 package com.study.memorable.File.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.study.memorable.File.dto.FileCreateDTO;
 import com.study.memorable.File.dto.FileReadDTO;
+import com.study.memorable.File.entity.File;
 import com.study.memorable.File.service.FileService;
-import com.study.memorable.OpenAI.dto.ChatGPTRequest;
-import com.study.memorable.OpenAI.dto.ChatGPTResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/file")
+@RequestMapping("/api/files")
 public class FileController {
     private final FileService fileService;
 
-//    @Value("${openai.model}")
-//    private String model;
-//
-//    @Value("${openai.api.url}")
-//    private String apiURL;
-
-//    @Value("${openai.api.key}")
-//    private String apiKey;
-
-    @Autowired
-    private RestTemplate restTemplate;
-
     @PostMapping("")
-    public String createFile(@RequestBody FileCreateDTO dto) {
-        fileService.createFile(dto);
-        return "파일 생성됨!";
+    public FileReadDTO createFileAndWorksheet(@RequestBody FileCreateDTO dto) {
+        return fileService.createFileAndWorksheet(dto);
     }
 
     @GetMapping("")
@@ -50,9 +25,20 @@ public class FileController {
         return fileService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public FileReadDTO findFileById(@PathVariable Long id) {
+        return fileService.findFileById(id);
+    }
+
+    @GetMapping("/logOddKeywords/{fileId}")
+    public String logOddIndexKeywords(@PathVariable Long fileId) {
+        fileService.logOddIndexKeywords(fileId);
+        return "키워드 2개로 나눠서 추출 성공!";
+    }
+
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id){
+    public String delete(@PathVariable Long id) {
         fileService.deleteById(id);
-        return "잘 삭제됨!";
+        return "파일 삭제됨!";
     }
 }

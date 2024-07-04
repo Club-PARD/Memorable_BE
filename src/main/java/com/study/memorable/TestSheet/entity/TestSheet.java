@@ -2,7 +2,6 @@ package com.study.memorable.TestSheet.entity;
 
 import com.study.memorable.File.entity.File;
 import com.study.memorable.TestSheet.dto.TestSheetCreateDTO;
-import com.study.memorable.TestSheet.dto.TestSheetReadDTO;
 import com.study.memorable.WrongSheet.entity.WrongSheet;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,36 +21,19 @@ public class TestSheet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String questions1;
-    private String answers1;
-    private String questions2;
-    private String answers2;
-    private String wrongAnswers;
-    private boolean isCompleteTest;
-    private boolean isNewTest;
-    private String score;
-    private LocalDateTime created_date;
-
     @ManyToOne
     @JoinColumn(name = "file_id")
     private File file;
 
-    @OneToMany(mappedBy = "testSheet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WrongSheet> wrongSheet;
+    private boolean bookmark;
 
-    public TestSheet toEntity(TestSheetCreateDTO dto) {
+    private LocalDateTime created_date;
+
+    public static TestSheet toEntity(TestSheetCreateDTO dto, File file){
         return TestSheet.builder()
-                .questions1(dto.getQuestions1())
-                .answers1(dto.getAnswers1())
-                .questions2(dto.getQuestions2())
-                .answers2(dto.getAnswers2())
-                .wrongAnswers(dto.getWrongAnswers())
-                .isCompleteTest(dto.isCompleteTest())
-                .isNewTest(dto.isNewTest())
-                .score(dto.getScore())
+                .file(file)
+                .bookmark(dto.isBookmark())
                 .created_date(LocalDateTime.now())
                 .build();
     }
-
-
 }

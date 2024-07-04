@@ -10,31 +10,31 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class WorkSheetReadDTO {
     private Long id;
+    private String name;
+    private String category;
+    private boolean bookmark;
+    private Boolean isCompleteAllBlanks;
+    private Boolean isReExtracted;
     private List<String> answer1;
     private List<String> answer2;
-    private boolean bookmark;
-
-    private int file_id;
-    private boolean isReExtracted;
-    private boolean isCompleteAllBlanks;
     private LocalDateTime created_date;
 
-
-    public static WorkSheetReadDTO toDTO(WorkSheet workSheet){
+    public static WorkSheetReadDTO toDTO(WorkSheet worksheet) {
         return WorkSheetReadDTO.builder()
-                .id(workSheet.getId())
-                .answer1(workSheet.getAnswer1())
-                .answer2(workSheet.getAnswer2())
-                .bookmark(workSheet.isBookmark())
-//                .file_id(workSheet.getFile_id())
-                .isReExtracted(workSheet.isReExtracted())
-                .isCompleteAllBlanks(workSheet.isCompleteAllBlanks())
-                .created_date(LocalDateTime.now())
+                .id(worksheet.getId())
+                .name(worksheet.getFile().getFile_name())
+                .category(worksheet.getFile().getCategory())
+                .bookmark(worksheet.isBookmark())
+                .isCompleteAllBlanks(worksheet.isCompleteAllBlanks())
+                .isReExtracted(worksheet.isReExtracted())
+                .answer1(worksheet.getAnswer1())
+                .answer2(worksheet.getAnswer2())
+                .created_date(worksheet.getCreated_date())
                 .build();
     }
 }

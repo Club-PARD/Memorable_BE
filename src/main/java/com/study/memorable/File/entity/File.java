@@ -1,6 +1,7 @@
 package com.study.memorable.File.entity;
 
 import com.study.memorable.File.dto.FileCreateDTO;
+import com.study.memorable.Questions.entity.Questions;
 import com.study.memorable.TestSheet.entity.TestSheet;
 import com.study.memorable.User.entity.User;
 import com.study.memorable.WorkSheet.entity.WorkSheet;
@@ -8,13 +9,14 @@ import com.study.memorable.WrongSheet.entity.WrongSheet;
 import jakarta.persistence.*;
 import lombok.*;
 import com.study.memorable.config.ListStringConverter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-@Embeddable
+@Slf4j
 @Entity
 @Getter
 @Setter
@@ -31,35 +33,62 @@ public class File {
 
     @Column(columnDefinition = "TEXT")
     private String content;
-    //    @Column(columnDefinition = "TEXT")
-//    @ElementCollection
+
     @Convert(converter = ListStringConverter.class)
-    private List<String> keyword1;
-    //    @ElementCollection
-//    @Column(columnDefinition = "TEXT")
-    @Convert(converter = ListStringConverter.class)
-    private List<String> keyword2;
-    private LocalDateTime create_date;
+    private List<String> keyword;
+
+    private LocalDateTime created_date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkSheet> workSheets;
+    private List<WorkSheet> worksheets;
 
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TestSheet> testSheets;
 
-    public File toEntity(FileCreateDTO dto) {
+    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WrongSheet> wrongSheets;
+
+    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Questions> questions;
+
+    public static File toEntity(FileCreateDTO dto, User user) {
         return File.builder()
-                .file_name(dto.getFile_name())
+                .file_name(dto.getFileName())
                 .category(dto.getCategory())
                 .content(dto.getContent())
-                .keyword1(dto.getKeyword1())
-                .keyword2(dto.getKeyword2())
-                .create_date(LocalDateTime.now())
+                .created_date(LocalDateTime.now())
+                .user(user)
                 .build();
     }
 
+    public List<String> getOddIndexKeywords() {
+        if (keyword == null || keyword.isEmpty()) {
+            return List.of();
+        }
+        return IntStream.range(0, keyword.size())
+                .filter(i -> i % 2 == 1)
+                .mapToObj(keyword::get)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getEvenIndexKeywords() {
+        if (keyword == null || keyword.isEmpty()) {
+            return List.of();
+        }
+        return IntStream.range(0, keyword.size())
+                .filter(i -> i % 2 == 0)
+                .mapToObj(keyword::get)
+                .collect(Collectors.toList());
+    }
+
+    public void tests() {
+        List<String> a = getOddIndexKeywords();
+        List<String> b = getEvenIndexKeywords();
+        log.info("1: " + a);
+        log.info("2: " + b);
+    }
 }

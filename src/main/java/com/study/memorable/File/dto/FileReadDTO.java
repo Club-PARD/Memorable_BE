@@ -14,25 +14,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileReadDTO {
-
     private Long id;
     private String file_name;
     private String category;
     private String content;
-    private List<String> keyword1;
-    private List<String> keyword2;
+    private List<String> keyword;
     private LocalDateTime created_date;
 
-    public static FileReadDTO toDTO(File file){
+    public static FileReadDTO toDTO(File file) {
         return FileReadDTO.builder()
                 .id(file.getId())
                 .file_name(file.getFile_name())
                 .category(file.getCategory())
                 .content(file.getContent())
-                .keyword1(file.getKeyword1())
-                .keyword2(file.getKeyword2())
                 .created_date(LocalDateTime.now())
                 .build();
     }
-
 }

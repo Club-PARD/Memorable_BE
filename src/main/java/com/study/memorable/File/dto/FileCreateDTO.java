@@ -1,17 +1,17 @@
 package com.study.memorable.File.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class FileCreateDTO {
-    private String file_name;
+    private String fileName;
+
     private String category;
+
     private String content;
-    private List<String> keyword1;
-    private List<String> keyword2;
-    private LocalDateTime create_date;
-    private Long user_id;
+
+    private String userId;
 }
