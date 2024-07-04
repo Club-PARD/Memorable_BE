@@ -1,5 +1,7 @@
 package com.study.memorable.WorkSheet.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.study.memorable.WorkSheet.entity.WorkSheet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,28 +15,54 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonPropertyOrder({ "worksheetId", "name", "category", "isCompleteAllBlanks", "isReExtracted", "answer1", "answer2" })
 public class WorkSheetReadDTO {
-    private Long id;
+    private Long worksheetId;
     private String name;
     private String category;
-    private boolean bookmark;
-    private Boolean isCompleteAllBlanks;
-    private Boolean isReExtracted;
-    private List<String> answer1;
-    private List<String> answer2;
-    private LocalDateTime created_date;
 
-    public static WorkSheetReadDTO toDTO(WorkSheet worksheet) {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean isCompleteAllBlanks;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean isReExtracted;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<String> answer1;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<String> answer2;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean worksheetBookmark;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private LocalDateTime worksheetCreate_date;
+
+    private String content;
+
+    // 기본 필드만 포함한 DTO
+    public static WorkSheetReadDTO toBasicDTO(WorkSheet worksheet) {
         return WorkSheetReadDTO.builder()
-                .id(worksheet.getId())
-                .name(worksheet.getFile().getFile_name())
+                .worksheetId(worksheet.getId())
+                .name(worksheet.getName())
                 .category(worksheet.getFile().getCategory())
-                .bookmark(worksheet.isBookmark())
+                .worksheetBookmark(worksheet.isBookmark())
+                .worksheetCreate_date(worksheet.getCreated_date())
+                .build();
+    }
+
+    // 모든 필드를 포함한 DTO
+    public static WorkSheetReadDTO toFullDTO(WorkSheet worksheet) {
+        return WorkSheetReadDTO.builder()
+                .worksheetId(worksheet.getId())
+                .name(worksheet.getName())
+                .category(worksheet.getFile().getCategory())
                 .isCompleteAllBlanks(worksheet.isCompleteAllBlanks())
                 .isReExtracted(worksheet.isReExtracted())
                 .answer1(worksheet.getAnswer1())
                 .answer2(worksheet.getAnswer2())
-                .created_date(worksheet.getCreated_date())
+                .content(worksheet.getFile().getContent())
                 .build();
     }
 }

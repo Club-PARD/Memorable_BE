@@ -32,11 +32,6 @@ public class UserService {
         return UserReadDTO.toDTO(user);
     }
 
-    public void updateUser(UserReadDTO dto, String id) {
-        User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        user.updateFromDTO(dto);
-    }
-
     @Transactional
     public void deleteUser(String id) {
         User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));

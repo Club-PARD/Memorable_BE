@@ -10,9 +10,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import com.study.memorable.config.ListStringConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -24,6 +27,7 @@ import java.util.stream.IntStream;
 @AllArgsConstructor
 @Builder
 public class File {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,22 +41,23 @@ public class File {
     @Convert(converter = ListStringConverter.class)
     private List<String> keyword;
 
+    @CreatedDate
     private LocalDateTime created_date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<WorkSheet> worksheets;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<TestSheet> testSheets;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<WrongSheet> wrongSheets;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Questions> questions;
 
     public static File toEntity(FileCreateDTO dto, User user) {
@@ -65,30 +70,32 @@ public class File {
                 .build();
     }
 
-    public List<String> getOddIndexKeywords() {
+    public Map<String, Object> getOddIndexKeywords() {
         if (keyword == null || keyword.isEmpty()) {
-            return List.of();
+            return Map.of();
         }
-        return IntStream.range(0, keyword.size())
+        List<String> oddKeywords = IntStream.range(0, keyword.size())
                 .filter(i -> i % 2 == 1)
                 .mapToObj(keyword::get)
                 .collect(Collectors.toList());
+        return Map.of("keywords", oddKeywords, "text", content);
     }
 
-    public List<String> getEvenIndexKeywords() {
+    public Map<String, Object> getEvenIndexKeywords() {
         if (keyword == null || keyword.isEmpty()) {
-            return List.of();
+            return Map.of();
         }
-        return IntStream.range(0, keyword.size())
+        List<String> evenKeywords = IntStream.range(0, keyword.size())
                 .filter(i -> i % 2 == 0)
                 .mapToObj(keyword::get)
-                .collect(Collectors.toList());
+                .toList();
+        return Map.of("keywords", evenKeywords, "text", content);
     }
 
     public void tests() {
-        List<String> a = getOddIndexKeywords();
-        List<String> b = getEvenIndexKeywords();
-        log.info("1: " + a);
-        log.info("2: " + b);
+        Map<String, Object> oddKeywords = getOddIndexKeywords();
+        Map<String, Object> evenKeywords = getEvenIndexKeywords();
+        log.info("1: " + oddKeywords);
+        log.info("2: " + evenKeywords);
     }
 }

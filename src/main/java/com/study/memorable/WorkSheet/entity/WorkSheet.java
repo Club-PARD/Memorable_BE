@@ -1,7 +1,6 @@
 package com.study.memorable.WorkSheet.entity;
 
 import com.study.memorable.File.entity.File;
-import com.study.memorable.WorkSheet.dto.WorkSheetCreateDTO;
 import com.study.memorable.config.ListStringConverter;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,10 +30,11 @@ public class WorkSheet {
     private boolean isReExtracted;
     private boolean isCompleteAllBlanks;
     private LocalDateTime created_date;
-    private LocalDateTime recentDate;
+    private LocalDateTime recent_date;
+
+    private String name;  // 추가된 필드
 
     @ManyToOne
     @JoinColumn(name = "file_id")
     private File file;
-
 }

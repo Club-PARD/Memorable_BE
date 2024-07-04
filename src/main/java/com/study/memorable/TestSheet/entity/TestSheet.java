@@ -26,6 +26,7 @@ public class TestSheet {
     private File file;
 
     private boolean bookmark;
+    private boolean isReExtracted;
 
     private LocalDateTime created_date;
 

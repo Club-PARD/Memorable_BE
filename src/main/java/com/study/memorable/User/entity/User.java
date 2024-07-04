@@ -5,6 +5,7 @@ import com.study.memorable.File.entity.File;
 import com.study.memorable.User.dto.UserReadDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,20 +19,21 @@ public class User {
 
     @Id
     private String id;
+
+    @Column(unique = true)
     private String email;
     private String givenName;
     private String familyName;
+
+    @CreatedDate
     private LocalDateTime created_date;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<File> files;
-
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<WorkSheetClickLog> workSheetClickLogs;
 
     public static User toEntity(UserCreateDTO dto){
         return User.builder()
-                .id(dto.getIdentifier()) // Changed from dto.getId() to dto.getIdentifier()
+                .id(dto.getIdentifier())
                 .email(dto.getEmail())
                 .givenName(dto.getGivenName())
                 .familyName(dto.getFamilyName())

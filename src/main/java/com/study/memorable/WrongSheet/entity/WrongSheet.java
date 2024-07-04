@@ -1,5 +1,6 @@
 package com.study.memorable.WrongSheet.entity;
 
+import com.study.memorable.File.entity.File;
 import com.study.memorable.TestSheet.entity.TestSheet;
 import com.study.memorable.WrongSheet.dto.WrongSheetCreateDTO;
 import jakarta.persistence.*;
@@ -23,11 +24,11 @@ public class WrongSheet {
     private String questions2;
     private String answers2;
     private boolean bookmark;
-    private LocalDateTime wrongsheetCreate_date;
+    private LocalDateTime created_date;
 
     @ManyToOne
     @JoinColumn(name = "testSheet_id")
-    private TestSheet testSheet;
+    private File file;
 
     public static WrongSheet toEntity(WrongSheetCreateDTO dto, TestSheet testSheet) {
         return WrongSheet.builder()
@@ -35,8 +36,8 @@ public class WrongSheet {
                 .answers1(dto.getAnswers1())
                 .questions2(dto.getQuestions2())
                 .answers2(dto.getAnswers2())
-                .wrongsheetCreate_date(LocalDateTime.now())
-                .testSheet(testSheet)
+                .created_date(LocalDateTime.now())
+                //  file 이 들어가야 하나 들어가지 말아야 하나 모르겠다.
                 .build();
     }
 }

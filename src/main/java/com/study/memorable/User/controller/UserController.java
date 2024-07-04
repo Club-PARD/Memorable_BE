@@ -30,11 +30,6 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-    @PatchMapping("/{id}")
-    public void updateUser(@RequestBody UserReadDTO dto, @PathVariable String id){
-        userService.updateUser(dto, id);
-    }
-
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable String id){
         userService.deleteUser(id);
