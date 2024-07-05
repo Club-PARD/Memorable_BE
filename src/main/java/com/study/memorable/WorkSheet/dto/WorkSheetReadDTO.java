@@ -25,7 +25,7 @@ public class WorkSheetReadDTO {
     private Boolean isCompleteAllBlanks;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Boolean isReExtracted;
+    private Boolean isAddWorkSheet;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> answer1;
@@ -39,6 +39,7 @@ public class WorkSheetReadDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime worksheetCreate_date;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String content;
 
     // 기본 필드만 포함한 DTO
@@ -59,7 +60,7 @@ public class WorkSheetReadDTO {
                 .name(worksheet.getName())
                 .category(worksheet.getFile().getCategory())
                 .isCompleteAllBlanks(worksheet.isCompleteAllBlanks())
-                .isReExtracted(worksheet.isReExtracted())
+                .isAddWorkSheet(worksheet.isAddWorksheet())
                 .answer1(worksheet.getAnswer1())
                 .answer2(worksheet.getAnswer2())
                 .content(worksheet.getFile().getContent())

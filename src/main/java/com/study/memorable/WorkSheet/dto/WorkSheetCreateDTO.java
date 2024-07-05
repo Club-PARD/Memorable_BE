@@ -10,7 +10,7 @@ import java.util.List;
 public class WorkSheetCreateDTO {
     private Long fileId;
     private Boolean isCompleteAllBlanks;
-    private Boolean isReExtracted;
+    private Boolean isAddWorkSheet;
     private List<String> answer1;
     private List<String> answer2;
 }

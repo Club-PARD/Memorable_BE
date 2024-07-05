@@ -27,10 +27,6 @@ public class WrongSheetReadDTO {
                 .bookmark(wrongSheet.isBookmark())
                 .name(wrongSheet.getFile().getFile_name())
                 .category(wrongSheet.getFile().getCategory())
-                .questions1(wrongSheet.getQuestions1())
-                .answers1(wrongSheet.getAnswers1())
-                .questions2(wrongSheet.getQuestions2())
-                .answers2(wrongSheet.getAnswers2())
                 .created_date(LocalDateTime.now())
                 .build();
     }

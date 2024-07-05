@@ -62,7 +62,7 @@ public class File {
 
     public static File toEntity(FileCreateDTO dto, User user) {
         return File.builder()
-                .file_name(dto.getFileName())
+                .file_name(dto.getName())
                 .category(dto.getCategory())
                 .content(dto.getContent())
                 .created_date(LocalDateTime.now())
@@ -77,7 +77,7 @@ public class File {
         List<String> oddKeywords = IntStream.range(0, keyword.size())
                 .filter(i -> i % 2 == 1)
                 .mapToObj(keyword::get)
-                .collect(Collectors.toList());
+                .toList();
         return Map.of("keywords", oddKeywords, "text", content);
     }
 

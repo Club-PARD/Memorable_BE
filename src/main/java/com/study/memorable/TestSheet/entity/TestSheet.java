@@ -2,12 +2,10 @@ package com.study.memorable.TestSheet.entity;
 
 import com.study.memorable.File.entity.File;
 import com.study.memorable.TestSheet.dto.TestSheetCreateDTO;
-import com.study.memorable.WrongSheet.entity.WrongSheet;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Builder
@@ -25,8 +23,10 @@ public class TestSheet {
     @JoinColumn(name = "file_id")
     private File file;
 
+    @Setter
     private boolean bookmark;
     private boolean isReExtracted;
+    private boolean isCompleteAllBlanks;
 
     private LocalDateTime created_date;
 
@@ -35,6 +35,8 @@ public class TestSheet {
                 .file(file)
                 .bookmark(dto.isBookmark())
                 .created_date(LocalDateTime.now())
+                .isReExtracted(dto.isReExtracted())
+                .isCompleteAllBlanks(dto.isCompleteAllBlanks())
                 .build();
     }
 }

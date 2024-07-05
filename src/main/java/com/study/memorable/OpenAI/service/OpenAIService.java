@@ -10,9 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -72,16 +70,10 @@ public class OpenAIService {
                 .collect(Collectors.toList());
     }
 
-//    private List<String> extractKeywordsFromMessage(String content) {
-//        return Arrays.stream(content.split(",\\s*"))
-//                .flatMap(keyword -> Arrays.stream(keyword.split("\\s+")))
-//                .collect(Collectors.toList());
-//    }
-
-    public List<String> processKeywords(List<String> keywords, String text) {
+    public Map<String, List<String>> processKeywords(List<String> keywords, String text) {
         String prompt = buildPrompt(keywords, text);
         String response = callOpenAI(prompt);
-        return parseResponseToQuestions(response);
+        return parseResponseToQuestionsAndAnswers(response);
     }
 
     private List<String> extractKeywordsFromMessage(String content) {
@@ -146,15 +138,23 @@ public class OpenAIService {
         return response.getChoices().get(0).getMessage().getContent();
     }
 
-    private List<String> parseResponseToQuestions(String response) {
+    private Map<String, List<String>> parseResponseToQuestionsAndAnswers(String response) {
         String[] lines = response.split("\n");
         List<String> questions = new ArrayList<>();
+        List<String> answers = new ArrayList<>();
 
         for (int i = 0; i < lines.length; i += 2) {
-            String question = lines[i].replace("Question: ", "").trim();
-            questions.add(question);
+            if (i + 1 < lines.length) {
+                String question = lines[i].replace("Question: ", "").trim();
+                String answer = lines[i + 1].replace("Answer: ", "").trim();
+                questions.add(question);
+                answers.add(answer);
+            }
         }
 
-        return questions;
+        Map<String, List<String>> result = new HashMap<>();
+        result.put("questions", questions);
+        result.put("answers", answers);
+        return result;
     }
 }

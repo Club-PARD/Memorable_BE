@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class FileCreateDTO {
-    private String fileName;
+    private String name;
 
     private String category;
 

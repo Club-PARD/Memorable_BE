@@ -40,4 +40,9 @@ public class Questions {
         this.answers = dto.getAnswers();
         this.user_answers = dto.getUser_answers();
     }
+
+    public void setUser_answers(String user_answers) {
+        this.user_answers = user_answers;
+    }
+
 }

@@ -40,10 +40,10 @@ public class QuestionService {
 
     private QuestionsReadDTO toDTO(Questions questions) {
         return QuestionsReadDTO.builder()
-                .id(questions.getId())
-                .questions(questions.getQuestions())
-                .answers(questions.getAnswers())
-                .user_answers(questions.getUser_answers())
+                .questionId(questions.getId())
+                .question(questions.getQuestions())
+                .answer(questions.getAnswers())
+                .userAnswer(questions.getUser_answers())
                 .build();
     }
 }

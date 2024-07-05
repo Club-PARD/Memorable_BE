@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class TestSheetCreateDTO {
     private Long fileId;
     private boolean bookmark;
+    private boolean isCompleteAllBlanks;
+    private boolean isReExtracted;
 }

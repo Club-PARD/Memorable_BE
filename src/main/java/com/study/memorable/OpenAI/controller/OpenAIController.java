@@ -24,11 +24,12 @@ public class OpenAIController {
     public List<String> extractKeywordsFromContent(@RequestBody String text) {
         int textLengthWithoutSpaces = text.replace(" ", "").replace("\n", "").length();
         int len = (int) (textLengthWithoutSpaces * 0.03);
+        log.info("\n\nlen: " + len);
         return openAIService.extractKeywordsFromText(len, text);
     }
 
     @PostMapping("/process-keywords")
-    public List<String> processKeywords(@RequestBody Map<String, Object> requestBody) {
+    public Map<String, List<String>> processKeywords(@RequestBody Map<String, Object> requestBody) {
         List<String> keywords = (List<String>) requestBody.get("keywords");
         String text = (String) requestBody.get("text");
         return openAIService.processKeywords(keywords, text);

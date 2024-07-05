@@ -35,13 +35,23 @@ public class WorkSheetController {
     }
 
     @PatchMapping("/recentDate/{worksheetId}")
-    public void updateRecentDate(@PathVariable Long worksheetId) {
-        workSheetService.updateRecentDate(worksheetId);
+    public WorkSheetReadDTO updateRecentDate(@PathVariable Long worksheetId) {
+        return workSheetService.updateRecentDate(worksheetId);
     }
 
     @GetMapping("/recentDate/{userId}")
     public WorkSheetReadDTO getMostRecentWorksheetByUserId(@PathVariable String userId) {
         return workSheetService.getMostRecentWorksheetByUserId(userId);
+    }
+
+    @PatchMapping("/done/{worksheetId}")
+    public WorkSheetReadDTO toggleIsCompleteAllBlanks(@PathVariable Long worksheetId) {
+        return workSheetService.toggleIsCompleteAllBlanks(worksheetId);
+    }
+
+    @PatchMapping("/addsheet/{worksheetId}")
+    public WorkSheetReadDTO toggleAddWorksheet(@PathVariable Long worksheetId) {
+        return workSheetService.toggleAddWorksheet(worksheetId);
     }
 
     @DeleteMapping("/{worksheetId}")

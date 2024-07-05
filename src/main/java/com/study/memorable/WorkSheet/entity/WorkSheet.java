@@ -27,12 +27,13 @@ public class WorkSheet {
     private List<String> answer2;
 
     private boolean bookmark;
-    private boolean isReExtracted;
+    private boolean isAddWorksheet;
+
     private boolean isCompleteAllBlanks;
     private LocalDateTime created_date;
     private LocalDateTime recent_date;
 
-    private String name;  // 추가된 필드
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "file_id")
