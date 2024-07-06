@@ -27,6 +27,8 @@ public class WorkSheet {
     private List<String> answer2;
 
     private boolean bookmark;
+
+    @Column(name = "is_add_worksheet")
     private boolean isAddWorksheet;
 
     private boolean isCompleteAllBlanks;

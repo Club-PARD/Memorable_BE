@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -12,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class TestSheetCreateDTO {
     private Long fileId;
     private boolean bookmark;
-    private boolean isCompleteAllBlanks;
+    private List<Boolean> isCompleteAllBlanks;
     private boolean isReExtracted;
 }

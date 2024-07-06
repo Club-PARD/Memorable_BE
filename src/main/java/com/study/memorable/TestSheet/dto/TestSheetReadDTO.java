@@ -28,7 +28,7 @@ public class TestSheetReadDTO {
     private boolean isReExtracted;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private boolean isCompleteAllBlanks;
+    private List<Boolean> isCompleteAllBlanks;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private boolean testsheetBookmark;
@@ -48,7 +48,7 @@ public class TestSheetReadDTO {
                 .name(testSheet.getFile().getFile_name())
                 .category(testSheet.getFile().getCategory())
                 .isReExtracted(testSheet.isReExtracted())
-                .isCompleteAllBlanks(testSheet.isCompleteAllBlanks())
+                .isCompleteAllBlanks(testSheet.getIsCompleteAllBlanks())
                 .questions1(questions1)
                 .questions2(questions2)
                 .build();

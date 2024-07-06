@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,7 @@ public class TestSheetService {
         TestSheet testSheet = TestSheet.builder()
                 .file(file)
                 .bookmark(false)
+                .isCompleteAllBlanks(Arrays.asList(false, false))
                 .created_date(LocalDateTime.now())
                 .build();
         testSheetRepo.save(testSheet);
@@ -144,12 +146,32 @@ public class TestSheetService {
     }
 
     @Transactional
-    public void updateUserAnswers(Long testsheetId, boolean isReExtracted, boolean isCompleteAllBlanks, List<String> userAnswers1, List<String> userAnswers2) {
+    public TestSheetSimpleReadDTO updateTestSheetBookmark(Long testsheetId) {
         TestSheet testSheet = testSheetRepo.findById(testsheetId)
                 .orElseThrow(() -> new RuntimeException("TestSheet not found"));
 
-        testSheet.setReExtracted(!isReExtracted);
-        testSheet.setCompleteAllBlanks(!isCompleteAllBlanks);
+        // Toggle the bookmark
+        testSheet.setBookmark(!testSheet.isBookmark());
+        testSheetRepo.save(testSheet);
+
+        // Return the updated details
+        return TestSheetSimpleReadDTO.toSimpleDTO(testSheet);
+    }
+
+    @Transactional
+    public void deleteTestSheet(Long testsheetId) {
+        TestSheet testSheet = testSheetRepo.findById(testsheetId)
+                .orElseThrow(() -> new RuntimeException("TestSheet not found"));
+        testSheetRepo.delete(testSheet);
+    }
+
+    @Transactional
+    public void updateUserAnswers(Long testsheetId, boolean isReExtracted, List<Boolean> isCompleteAllBlanks, List<String> userAnswers1, List<String> userAnswers2) {
+        TestSheet testSheet = testSheetRepo.findById(testsheetId)
+                .orElseThrow(() -> new RuntimeException("TestSheet not found"));
+
+        testSheet.setReExtracted(isReExtracted);
+        testSheet.setCompleteAllBlanks(isCompleteAllBlanks);
 
         File file = testSheet.getFile();
         List<Questions> questions = questionsRepo.findByFile(file);
@@ -173,23 +195,5 @@ public class TestSheetService {
         }
     }
 
-    @Transactional
-    public TestSheetSimpleReadDTO updateTestSheetBookmark(Long testsheetId) {
-        TestSheet testSheet = testSheetRepo.findById(testsheetId)
-                .orElseThrow(() -> new RuntimeException("TestSheet not found"));
 
-        // Toggle the bookmark
-        testSheet.setBookmark(!testSheet.isBookmark());
-        testSheetRepo.save(testSheet);
-
-        // Return the updated details
-        return TestSheetSimpleReadDTO.toSimpleDTO(testSheet);
-    }
-
-    @Transactional
-    public void deleteTestSheet(Long testsheetId) {
-        TestSheet testSheet = testSheetRepo.findById(testsheetId)
-                .orElseThrow(() -> new RuntimeException("TestSheet not found"));
-        testSheetRepo.delete(testSheet);
-    }
 }

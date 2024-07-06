@@ -1,6 +1,5 @@
 package com.study.memorable.TestSheet.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.study.memorable.Questions.dto.QuestionsReadDTO;
 import com.study.memorable.TestSheet.entity.TestSheet;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ public class TestSheetDetailReadDTO {
     private String name;
     private String category;
     private boolean isReExtracted;
-    private boolean isCompleteAllBlanks;
+    private List<Boolean> isCompleteAllBlanks;
     private List<QuestionsReadDTO> questions1;
     private List<QuestionsReadDTO> questions2;
 
@@ -29,7 +28,7 @@ public class TestSheetDetailReadDTO {
                 .name(testSheet.getFile().getFile_name())
                 .category(testSheet.getFile().getCategory())
                 .isReExtracted(testSheet.isReExtracted())
-                .isCompleteAllBlanks(testSheet.isCompleteAllBlanks())
+                .isCompleteAllBlanks(testSheet.getIsCompleteAllBlanks())
                 .questions1(questions1)
                 .questions2(questions2)
                 .build();

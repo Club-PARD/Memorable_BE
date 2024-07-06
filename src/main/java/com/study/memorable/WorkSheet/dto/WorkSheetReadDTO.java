@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({ "worksheetId", "name", "category", "isCompleteAllBlanks", "isReExtracted", "answer1", "answer2" })
+@JsonPropertyOrder({ "worksheetId", "name", "category", "isCompleteAllBlanks", "isAddWorksheet", "answer1", "answer2" })
 public class WorkSheetReadDTO {
     private Long worksheetId;
     private String name;
@@ -25,7 +25,7 @@ public class WorkSheetReadDTO {
     private Boolean isCompleteAllBlanks;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Boolean isAddWorkSheet;
+    private Boolean isAddWorksheet;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> answer1;
@@ -60,7 +60,7 @@ public class WorkSheetReadDTO {
                 .name(worksheet.getName())
                 .category(worksheet.getFile().getCategory())
                 .isCompleteAllBlanks(worksheet.isCompleteAllBlanks())
-                .isAddWorkSheet(worksheet.isAddWorksheet())
+                .isAddWorksheet(worksheet.isAddWorksheet())
                 .answer1(worksheet.getAnswer1())
                 .answer2(worksheet.getAnswer2())
                 .content(worksheet.getFile().getContent())

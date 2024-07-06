@@ -33,18 +33,20 @@ public class TestSheetController {
         return testSheetService.getTestSheetById(testsheetId);
     }
 
+
     @PatchMapping("/{testsheetId}")
     public ResponseEntity<Void> updateUserAnswers(
             @PathVariable Long testsheetId,
             @RequestBody Map<String, Object> userAnswers) {
         boolean isReExtracted = (boolean) userAnswers.get("isReExtracted");
-        boolean isCompleteAllBlanks = (boolean) userAnswers.get("isCompleteAllBlanks");
+        List<Boolean> isCompleteAllBlanks = (List<Boolean>) userAnswers.get("isCompleteAllBlanks");
         List<String> userAnswers1 = (List<String>) userAnswers.get("userAnswers1");
         List<String> userAnswers2 = (List<String>) userAnswers.get("userAnswers2");
 
         testSheetService.updateUserAnswers(testsheetId, isReExtracted, isCompleteAllBlanks, userAnswers1, userAnswers2);
         return ResponseEntity.noContent().build();
     }
+
 
     @PatchMapping("/bookmark/{testsheetId}")
     public ResponseEntity<TestSheetSimpleReadDTO> updateTestSheetBookmark(@PathVariable Long testsheetId) {

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -26,9 +27,15 @@ public class TestSheet {
     @Setter
     private boolean bookmark;
     private boolean isReExtracted;
-    private boolean isCompleteAllBlanks;
+
+    @ElementCollection
+    private List<Boolean> isCompleteAllBlanks;
 
     private LocalDateTime created_date;
+
+    public void setCompleteAllBlanks(List<Boolean> isCompleteAllBlanks) {
+        this.isCompleteAllBlanks = isCompleteAllBlanks;
+    }
 
     public static TestSheet toEntity(TestSheetCreateDTO dto, File file){
         return TestSheet.builder()
@@ -36,7 +43,7 @@ public class TestSheet {
                 .bookmark(dto.isBookmark())
                 .created_date(LocalDateTime.now())
                 .isReExtracted(dto.isReExtracted())
-                .isCompleteAllBlanks(dto.isCompleteAllBlanks())
+                .isCompleteAllBlanks(dto.getIsCompleteAllBlanks())
                 .build();
     }
 }
