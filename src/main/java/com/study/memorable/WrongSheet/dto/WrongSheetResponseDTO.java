@@ -1,7 +1,7 @@
 package com.study.memorable.WrongSheet.dto;
 
-import com.study.memorable.Questions.entity.Questions;
 import com.study.memorable.WrongSheet.entity.WrongSheet;
+import com.study.memorable.WrongSheet.entity.WrongSheetQuestion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,12 +30,12 @@ public class WrongSheetResponseDTO {
     }
 
     public static WrongSheetResponseDTO toDTO(WrongSheet wrongSheet) {
-        List<QuestionResponseDTO> questionResponseDTOs = wrongSheet.getFile().getQuestions().stream()
-                .map(question -> new QuestionResponseDTO(
-                        question.getId(),
-                        question.getQuestions(),
-                        question.getAnswers(),
-                        question.getUser_answers()
+        List<QuestionResponseDTO> questionResponseDTOs = wrongSheet.getWrongSheetQuestions().stream()
+                .map(wrongSheetQuestion -> new QuestionResponseDTO(
+                        wrongSheetQuestion.getQuestion().getId(),
+                        wrongSheetQuestion.getQuestion().getQuestions(),
+                        wrongSheetQuestion.getQuestion().getAnswers(),
+                        wrongSheetQuestion.getQuestion().getUser_answers()
                 ))
                 .collect(Collectors.toList());
 

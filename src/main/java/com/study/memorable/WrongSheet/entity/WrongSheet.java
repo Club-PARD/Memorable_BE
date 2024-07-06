@@ -1,12 +1,11 @@
 package com.study.memorable.WrongSheet.entity;
 
 import com.study.memorable.File.entity.File;
-import com.study.memorable.TestSheet.entity.TestSheet;
-import com.study.memorable.WrongSheet.dto.WrongSheetCreateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -23,7 +22,9 @@ public class WrongSheet {
     private LocalDateTime created_date;
 
     @ManyToOne
-    @JoinColumn(name = "testSheet_id")
+    @JoinColumn(name = "file_id")
     private File file;
 
+    @OneToMany(mappedBy = "wrongSheet", cascade = CascadeType.ALL)
+    private List<WrongSheetQuestion> wrongSheetQuestions;
 }

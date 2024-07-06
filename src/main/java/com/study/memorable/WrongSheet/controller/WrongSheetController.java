@@ -2,6 +2,7 @@ package com.study.memorable.WrongSheet.controller;
 
 import com.study.memorable.WrongSheet.dto.WrongSheetCreateDTO;
 import com.study.memorable.WrongSheet.dto.WrongSheetResponseDTO;
+import com.study.memorable.WrongSheet.dto.WrongSheetSimpleReadDTO;
 import com.study.memorable.WrongSheet.service.WrongSheetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class WrongSheetController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<WrongSheetResponseDTO>> getWrongSheetsByUserId(@PathVariable String userId) {
-        List<WrongSheetResponseDTO> response = wrongSheetService.getWrongSheetsByUserId(String.valueOf(Long.valueOf(userId)));
+    public ResponseEntity<List<WrongSheetSimpleReadDTO>> getWrongSheetsByUserId(@PathVariable String userId) {
+        List<WrongSheetSimpleReadDTO> response = wrongSheetService.getWrongSheetsByUserId(userId);
         return ResponseEntity.ok(response);
     }
 

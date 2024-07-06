@@ -5,8 +5,11 @@ import com.study.memorable.Questions.Repo.QuestionsRepo;
 import com.study.memorable.Questions.entity.Questions;
 import com.study.memorable.WrongSheet.dto.WrongSheetCreateDTO;
 import com.study.memorable.WrongSheet.dto.WrongSheetResponseDTO;
+import com.study.memorable.WrongSheet.dto.WrongSheetSimpleReadDTO;
 import com.study.memorable.WrongSheet.entity.WrongSheet;
+import com.study.memorable.WrongSheet.entity.WrongSheetQuestion;
 import com.study.memorable.WrongSheet.repo.WrongSheetRepo;
+import com.study.memorable.WrongSheet.repo.WrongSheetQuestionRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class WrongSheetService {
     private final WrongSheetRepo wrongSheetRepo;
+    private final WrongSheetQuestionRepo wrongSheetQuestionRepo;
     private final QuestionsRepo questionsRepo;
 
     @Transactional
@@ -34,31 +38,26 @@ public class WrongSheetService {
                 .bookmark(false)
                 .created_date(LocalDateTime.now())
                 .build();
-
         wrongSheetRepo.save(wrongSheet);
 
-        List<WrongSheetResponseDTO.QuestionResponseDTO> questionResponseDTOs = questions.stream()
-                .map(question -> new WrongSheetResponseDTO.QuestionResponseDTO(
-                        question.getId(),
-                        question.getQuestions(),
-                        question.getAnswers(),
-                        question.getUser_answers()
-                ))
+        List<WrongSheetQuestion> wrongSheetQuestions = questions.stream()
+                .map(question -> WrongSheetQuestion.builder()
+                        .wrongSheet(wrongSheet)
+                        .question(question)
+                        .build())
                 .collect(Collectors.toList());
+        wrongSheetQuestionRepo.saveAll(wrongSheetQuestions);
 
-        return new WrongSheetResponseDTO(
-                wrongSheet.getId(),
-                file.getFile_name(),
-                file.getCategory(),
-                questionResponseDTOs
-        );
+        wrongSheet.setWrongSheetQuestions(wrongSheetQuestions);
+
+        return WrongSheetResponseDTO.toDTO(wrongSheet);
     }
 
     @Transactional(readOnly = true)
-    public List<WrongSheetResponseDTO> getWrongSheetsByUserId(String userId) {
-        List<WrongSheet> wrongSheets = wrongSheetRepo.findByUserId(Long.valueOf(userId)); // 메서드가 필요합니다.
+    public List<WrongSheetSimpleReadDTO> getWrongSheetsByUserId(String userId) {
+        List<WrongSheet> wrongSheets = wrongSheetRepo.findByUserId(Long.valueOf(userId));
         return wrongSheets.stream()
-                .map(WrongSheetResponseDTO::toDTO)
+                .map(WrongSheetSimpleReadDTO::toSimpleDTO)
                 .collect(Collectors.toList());
     }
 
