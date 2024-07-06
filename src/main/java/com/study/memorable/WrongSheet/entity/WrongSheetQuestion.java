@@ -16,7 +16,7 @@ public class WrongSheetQuestion {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "wrongsheet_id")
+    @JoinColumn(name = "wrong_sheet_id")
     private WrongSheet wrongSheet;
 
     @ManyToOne

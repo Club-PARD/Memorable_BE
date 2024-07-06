@@ -31,11 +31,11 @@ public class WrongSheetResponseDTO {
 
     public static WrongSheetResponseDTO toDTO(WrongSheet wrongSheet) {
         List<QuestionResponseDTO> questionResponseDTOs = wrongSheet.getWrongSheetQuestions().stream()
-                .map(wrongSheetQuestion -> new QuestionResponseDTO(
-                        wrongSheetQuestion.getQuestion().getId(),
-                        wrongSheetQuestion.getQuestion().getQuestions(),
-                        wrongSheetQuestion.getQuestion().getAnswers(),
-                        wrongSheetQuestion.getQuestion().getUser_answers()
+                .map(wsq -> new QuestionResponseDTO(
+                        wsq.getQuestion().getId(),
+                        wsq.getQuestion().getQuestions(),
+                        wsq.getQuestion().getAnswers(),
+                        wsq.getQuestion().getUser_answers()
                 ))
                 .collect(Collectors.toList());
 

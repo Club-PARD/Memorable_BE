@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({ "worksheetId", "name", "category", "isCompleteAllBlanks", "isAddWorksheet", "answer1", "answer2" })
+@JsonPropertyOrder({ "worksheetId", "name", "category", "isCompleteAllBlanks", "isAddWorksheet", "isMakeTestSheet", "answer1", "answer2", "content" })
 public class WorkSheetReadDTO {
     private Long worksheetId;
     private String name;
@@ -42,6 +42,8 @@ public class WorkSheetReadDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String content;
 
+    private Boolean isMakeTestSheet;
+
     // 기본 필드만 포함한 DTO
     public static WorkSheetReadDTO toBasicDTO(WorkSheet worksheet) {
         return WorkSheetReadDTO.builder()
@@ -50,6 +52,7 @@ public class WorkSheetReadDTO {
                 .category(worksheet.getFile().getCategory())
                 .worksheetBookmark(worksheet.isBookmark())
                 .worksheetCreate_date(worksheet.getCreated_date())
+                .isMakeTestSheet(worksheet.isMakeTestSheet())
                 .build();
     }
 
@@ -61,6 +64,7 @@ public class WorkSheetReadDTO {
                 .category(worksheet.getFile().getCategory())
                 .isCompleteAllBlanks(worksheet.isCompleteAllBlanks())
                 .isAddWorksheet(worksheet.isAddWorksheet())
+                .isMakeTestSheet(worksheet.isMakeTestSheet())
                 .answer1(worksheet.getAnswer1())
                 .answer2(worksheet.getAnswer2())
                 .content(worksheet.getFile().getContent())

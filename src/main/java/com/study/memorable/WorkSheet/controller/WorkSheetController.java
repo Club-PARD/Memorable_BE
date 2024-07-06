@@ -54,6 +54,11 @@ public class WorkSheetController {
         return workSheetService.toggleAddWorksheet(worksheetId);
     }
 
+    @PatchMapping("/make/{worksheetId}")
+    public WorkSheetReadDTO makeWorksheet(@PathVariable Long worksheetId) {
+        return workSheetService.makeWorksheet(worksheetId);
+    }
+
     @DeleteMapping("/{worksheetId}")
     public void deleteWorksheet(@PathVariable Long worksheetId) {
         workSheetService.deleteWorksheet(worksheetId);

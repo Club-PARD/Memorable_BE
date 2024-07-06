@@ -163,6 +163,17 @@ public class WorkSheetService {
     }
 
     @Transactional
+    public WorkSheetReadDTO makeWorksheet(Long worksheetId) {
+        WorkSheet worksheet = workSheetRepo.findById(worksheetId)
+                .orElseThrow(() -> new RuntimeException("Worksheet not found"));
+
+        worksheet.setMakeTestSheet(true);
+        workSheetRepo.save(worksheet);
+
+        return WorkSheetReadDTO.toFullDTO(worksheet);
+    }
+
+    @Transactional
     public void deleteWorksheet(Long worksheetId) {
         WorkSheet worksheet = workSheetRepo.findById(worksheetId)
                 .orElseThrow(() -> new RuntimeException("Worksheet not found"));

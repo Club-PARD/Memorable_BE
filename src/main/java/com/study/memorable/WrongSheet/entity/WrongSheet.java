@@ -1,6 +1,7 @@
 package com.study.memorable.WrongSheet.entity;
 
 import com.study.memorable.File.entity.File;
+import com.study.memorable.config.ListStringConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,10 @@ public class WrongSheet {
     @JoinColumn(name = "file_id")
     private File file;
 
-    @OneToMany(mappedBy = "wrongSheet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wrongSheet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WrongSheetQuestion> wrongSheetQuestions;
+
+    @Convert(converter = ListStringConverter.class)
+    @Column(columnDefinition = "TEXT")
+    private List<String> questionIds;
 }

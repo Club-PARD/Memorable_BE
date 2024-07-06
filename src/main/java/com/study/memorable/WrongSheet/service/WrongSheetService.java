@@ -31,31 +31,39 @@ public class WrongSheetService {
                 .map(WrongSheetCreateDTO.QuestionDTO::getQuestionId)
                 .collect(Collectors.toList()));
 
-        File file = questions.get(0).getFile(); // Assuming all questions belong to the same file
+        List<String> questionIds = questions.stream()
+                .map(question -> String.valueOf(question.getId()))
+                .collect(Collectors.toList());
+
+        File file = questions.get(0).getFile();
 
         WrongSheet wrongSheet = WrongSheet.builder()
                 .file(file)
                 .bookmark(false)
                 .created_date(LocalDateTime.now())
+                .questionIds(questionIds)
                 .build();
         wrongSheetRepo.save(wrongSheet);
 
+        final WrongSheet finalWrongSheet = wrongSheet;
+
         List<WrongSheetQuestion> wrongSheetQuestions = questions.stream()
                 .map(question -> WrongSheetQuestion.builder()
-                        .wrongSheet(wrongSheet)
+                        .wrongSheet(finalWrongSheet)
                         .question(question)
                         .build())
                 .collect(Collectors.toList());
+
         wrongSheetQuestionRepo.saveAll(wrongSheetQuestions);
 
-        wrongSheet.setWrongSheetQuestions(wrongSheetQuestions);
+        finalWrongSheet.setWrongSheetQuestions(wrongSheetQuestions);
 
-        return WrongSheetResponseDTO.toDTO(wrongSheet);
+        return WrongSheetResponseDTO.toDTO(finalWrongSheet);
     }
 
     @Transactional(readOnly = true)
-    public List<WrongSheetSimpleReadDTO> getWrongSheetsByUserId(String userId) {
-        List<WrongSheet> wrongSheets = wrongSheetRepo.findByUserId(Long.valueOf(userId));
+    public List<WrongSheetSimpleReadDTO> getWrongSheetsByUserId(Long userId) {
+        List<WrongSheet> wrongSheets = wrongSheetRepo.findByUserId(userId);
         return wrongSheets.stream()
                 .map(WrongSheetSimpleReadDTO::toSimpleDTO)
                 .collect(Collectors.toList());

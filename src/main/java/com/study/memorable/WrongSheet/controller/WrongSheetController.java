@@ -25,7 +25,7 @@ public class WrongSheetController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<WrongSheetSimpleReadDTO>> getWrongSheetsByUserId(@PathVariable String userId) {
-        List<WrongSheetSimpleReadDTO> response = wrongSheetService.getWrongSheetsByUserId(userId);
+        List<WrongSheetSimpleReadDTO> response = wrongSheetService.getWrongSheetsByUserId(Long.valueOf(userId));
         return ResponseEntity.ok(response);
     }
 
