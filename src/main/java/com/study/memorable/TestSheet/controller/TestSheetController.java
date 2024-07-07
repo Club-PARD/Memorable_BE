@@ -3,6 +3,7 @@ package com.study.memorable.TestSheet.controller;
 import com.study.memorable.TestSheet.dto.TestSheetDetailReadDTO;
 import com.study.memorable.TestSheet.dto.TestSheetReadDTO;
 import com.study.memorable.TestSheet.dto.TestSheetSimpleReadDTO;
+import com.study.memorable.TestSheet.dto.TestSheetUpdateDTO;
 import com.study.memorable.TestSheet.service.TestSheetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,20 +34,13 @@ public class TestSheetController {
         return testSheetService.getTestSheetById(testsheetId);
     }
 
-
     @PatchMapping("/{testsheetId}")
-    public ResponseEntity<Void> updateUserAnswers(
+    public ResponseEntity<TestSheetUpdateDTO> updateUserAnswers(
             @PathVariable Long testsheetId,
-            @RequestBody Map<String, Object> userAnswers) {
-        boolean isReExtracted = (boolean) userAnswers.get("isReExtracted");
-        List<Boolean> isCompleteAllBlanks = (List<Boolean>) userAnswers.get("isCompleteAllBlanks");
-        List<String> userAnswers1 = (List<String>) userAnswers.get("userAnswers1");
-        List<String> userAnswers2 = (List<String>) userAnswers.get("userAnswers2");
-
-        testSheetService.updateUserAnswers(testsheetId, isReExtracted, isCompleteAllBlanks, userAnswers1, userAnswers2);
-        return ResponseEntity.noContent().build();
+            @RequestBody TestSheetUpdateDTO userAnswers) {
+        TestSheetUpdateDTO updatedTestSheet = testSheetService.updateUserAnswers(testsheetId, userAnswers);
+        return ResponseEntity.ok(updatedTestSheet);
     }
-
 
     @PatchMapping("/bookmark/{testsheetId}")
     public ResponseEntity<TestSheetSimpleReadDTO> updateTestSheetBookmark(@PathVariable Long testsheetId) {

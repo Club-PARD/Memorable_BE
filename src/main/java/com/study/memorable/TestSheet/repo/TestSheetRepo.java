@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TestSheetRepo extends JpaRepository<TestSheet, Long> {
-    //    List<TestSheet> findByFile_User_Id(String userIdentifier);
     @Query("SELECT ts FROM TestSheet ts WHERE ts.file.user.id = :userId")
     List<TestSheet> findByFileUserId(@Param("userId") String userId);
 }

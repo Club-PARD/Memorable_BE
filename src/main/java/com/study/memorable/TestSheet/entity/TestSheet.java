@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -33,6 +35,11 @@ public class TestSheet {
 
     private LocalDateTime created_date;
 
+    private int score;
+
+    @ElementCollection
+    private List<Boolean> isCorrect;
+
     public void setCompleteAllBlanks(List<Boolean> isCompleteAllBlanks) {
         this.isCompleteAllBlanks = isCompleteAllBlanks;
     }
@@ -44,6 +51,8 @@ public class TestSheet {
                 .created_date(LocalDateTime.now())
                 .isReExtracted(dto.isReExtracted())
                 .isCompleteAllBlanks(dto.getIsCompleteAllBlanks())
+                .score(0)
+                .isCorrect(new ArrayList<>(Collections.nCopies(20, false)))
                 .build();
     }
 }

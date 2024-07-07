@@ -1,4 +1,3 @@
-// TestSheetResponseDTO.java
 package com.study.memorable.TestSheet.dto;
 
 import com.study.memorable.Questions.dto.QuestionsReadDTO;

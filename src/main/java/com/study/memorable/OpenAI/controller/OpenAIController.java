@@ -34,4 +34,13 @@ public class OpenAIController {
         String text = (String) requestBody.get("text");
         return openAIService.processKeywords(keywords, text);
     }
+
+    @PostMapping("/score-answers")
+    public Map<String, Object> scoreAnswers(@RequestBody Map<String, Object> requestBody) {
+        String content = (String) requestBody.get("content");
+        List<String> questions = (List<String>) requestBody.get("questions");
+        List<String> answers = (List<String>) requestBody.get("answers");
+        List<String> userAnswers = (List<String>) requestBody.get("userAnswers");
+        return openAIService.scoreAnswers(content, questions, answers, userAnswers);
+    }
 }

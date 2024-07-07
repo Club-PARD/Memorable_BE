@@ -118,7 +118,7 @@ public class OpenAIService {
                         "8. If the text is code, generate questions related to programming syntax.\n" +
                         "9. Extracted questions should be in Korean.\n" +
                         "10. 문제를 생성할 때, 정답이 특정 카테고리 안에서 고를 수 있는 정답이라면, 문제에서 그 카테고리를 언급해줘. 물론, 그 문제 내에서 정답이 직접적으로 언급되면 안돼.\n" +
-                        "출력 형식: 질문은 Q: 로 시작하고, 답변은 A: 로 시작해야 한다. 질문과 답변은 각각 개행없이 연속으로 작성되어야 한다. 문제 앞에 번호 절대 붙이지 마. (문제+답)의 리스트 정답은 중복되면 안돼. 정답은 무조건 이 안에서 추출해야 해 : %s\n" +
+                        "출력 형식: 질문은 Q: 로 시작하고, 답변은 A: 로 시작해야 한다. 질문과 답변은 각각 개행없이 연속으로 작성되어야 한다. ##문제 앞에 번호 절대 붙이지 마!!!## (문제+답)의 리스트 정답은 중복되면 안돼. 정답은 무조건 이 안에서 추출해야 해 : %s\n" +
                         "### Text ###\n" +
                         "%s",
                 keywordList, keywordList, keywordList, keywordList, text
@@ -166,5 +166,48 @@ public class OpenAIService {
         result.put("answers", answers);
         return result;
     }
+
+    public Map<String, Object> scoreAnswers(String content, List<String> questions, List<String> answers, List<String> userAnswers) {
+        String prompt = String.format(
+                "Please grade the following set of 20 questions and answers. " +
+                        "Read the content and understand its context. " +
+                        "Compare each answer and user answer against the content and questions. " +
+                        "If the user's answer is contextually similar to the actual answer based on the content and questions, mark it as correct. " +
+                        "Increment the score by 1 for each correct answer and change the corresponding index in isCorrect to true.\n\n" +
+                        "Content: %s\n\n" +
+                        "Questions and Answers:\n\n",
+                content
+        );
+
+        for (int i = 0; i < questions.size(); i++) {
+            prompt += String.format("Q%d: %s\nA: %s\nUser Answer: %s\n\n", i + 1, questions.get(i), answers.get(i), userAnswers.get(i));
+        }
+
+        prompt += "Return the results in the format <score, isCorrect> where score is an integer and isCorrect is a list of 20 boolean values.\n 다른 부연설명을 일체 하지 말고 정해진 형식만 출력해줘.";
+
+        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<ChatGPTRequest> entity = new HttpEntity<>(request, headers);
+
+        log.info("Calling OpenAI API for scoring answers");
+        ChatGPTResponse response = restTemplate.postForObject(apiURL, entity, ChatGPTResponse.class);
+        log.info("Received response from OpenAI API for scoring answers: {}", response);
+
+        assert response != null;
+        String result = response.getChoices().get(0).getMessage().getContent();
+
+        return parseScoreResponse(result);
+    }
+
+    private Map<String, Object> parseScoreResponse(String response) {
+        Map<String, Object> result = new HashMap<>();
+        String[] parts = response.replace("<", "").replace(">", "").split(",");
+        result.put("score", Integer.parseInt(parts[0].trim()));
+        result.put("isCorrect", Arrays.stream(parts[1].trim().split(" ")).map(Boolean::parseBoolean).collect(Collectors.toList()));
+        return result;
+    }
+
+
 
 }
