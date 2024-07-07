@@ -62,7 +62,7 @@ public class WrongSheetService {
     }
 
     @Transactional(readOnly = true)
-    public List<WrongSheetSimpleReadDTO> getWrongSheetsByUserId(Long userId) {
+    public List<WrongSheetSimpleReadDTO> getWrongSheetsByUserId(String userId) {
         List<WrongSheet> wrongSheets = wrongSheetRepo.findByUserId(userId);
         return wrongSheets.stream()
                 .map(WrongSheetSimpleReadDTO::toSimpleDTO)
@@ -74,6 +74,15 @@ public class WrongSheetService {
         WrongSheet wrongSheet = wrongSheetRepo.findById(wrongsheetId)
                 .orElseThrow(() -> new RuntimeException("WrongSheet not found"));
         return WrongSheetResponseDTO.toDTO(wrongSheet);
+    }
+
+    @Transactional
+    public WrongSheetSimpleReadDTO toggleBookmark(Long wrongsheetId) {
+        WrongSheet wrongSheet = wrongSheetRepo.findById(wrongsheetId)
+                .orElseThrow(() -> new RuntimeException("WrongSheet not found"));
+        wrongSheet.setBookmark(!wrongSheet.isBookmark());
+        wrongSheetRepo.save(wrongSheet);
+        return WrongSheetSimpleReadDTO.toSimpleDTO(wrongSheet);
     }
 
     @Transactional

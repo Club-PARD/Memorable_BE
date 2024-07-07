@@ -58,9 +58,9 @@ public class OpenAIService {
 
         HttpEntity<ChatGPTRequest> entity = new HttpEntity<>(request, headers);
 
-        log.info("Calling OpenAI API with prompt");
+        log.info("Calling OpenAI API with prompt for keywords");
         ChatGPTResponse response = restTemplate.postForObject(apiURL, entity, ChatGPTResponse.class);
-        log.info("Received response from OpenAI API: {}", response);
+        log.info("Received response from OpenAI API for keywords: {}", response);
 
         assert response != null;
         return response.getChoices().stream()
@@ -73,6 +73,7 @@ public class OpenAIService {
     public Map<String, List<String>> processKeywords(List<String> keywords, String text) {
         String prompt = buildPrompt(keywords, text);
         String response = callOpenAI(prompt);
+        log.info("Received response from OpenAI API for questions and answers: \n{}", response);
         return parseResponseToQuestionsAndAnswers(response);
     }
 
@@ -117,12 +118,13 @@ public class OpenAIService {
                         "8. If the text is code, generate questions related to programming syntax.\n" +
                         "9. Extracted questions should be in Korean.\n" +
                         "10. 문제를 생성할 때, 정답이 특정 카테고리 안에서 고를 수 있는 정답이라면, 문제에서 그 카테고리를 언급해줘. 물론, 그 문제 내에서 정답이 직접적으로 언급되면 안돼.\n" +
-                        "출력 형식: (문제+답)의 리스트 정답은 중복되면 안돼. 정답은 무조건 이 안에서 추출해야 해 : %s\n" +
+                        "출력 형식: 질문은 Q: 로 시작하고, 답변은 A: 로 시작해야 한다. 질문과 답변은 각각 개행없이 연속으로 작성되어야 한다. 문제 앞에 번호 절대 붙이지 마. (문제+답)의 리스트 정답은 중복되면 안돼. 정답은 무조건 이 안에서 추출해야 해 : %s\n" +
                         "### Text ###\n" +
                         "%s",
                 keywordList, keywordList, keywordList, keywordList, text
         );
     }
+
 
     private String callOpenAI(String prompt) {
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
@@ -132,6 +134,7 @@ public class OpenAIService {
 
         HttpEntity<ChatGPTRequest> entity = new HttpEntity<>(request, headers);
 
+        log.info("Calling OpenAI API with prompt for questions and answers");
         ChatGPTResponse response = restTemplate.postForObject(apiURL, entity, ChatGPTResponse.class);
 
         assert response != null;
@@ -143,18 +146,25 @@ public class OpenAIService {
         List<String> questions = new ArrayList<>();
         List<String> answers = new ArrayList<>();
 
-        for (int i = 0; i < lines.length; i += 2) {
-            if (i + 1 < lines.length) {
-                String question = lines[i].replace("Question: ", "").trim();
-                String answer = lines[i + 1].replace("Answer: ", "").trim();
-                questions.add(question);
-                answers.add(answer);
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith("Q: ")) {
+                String question = lines[i].replace("Q: ", "").trim();
+                if (i + 1 < lines.length && lines[i + 1].startsWith("A: ")) {
+                    String answer = lines[i + 1].replace("A: ", "").trim();
+                    questions.add(question);
+                    answers.add(answer);
+                    i++; // Skip next line since it's the answer line
+                }
             }
         }
+
+        log.info("Parsed questions: {}", questions);
+        log.info("Parsed answers: {}", answers);
 
         Map<String, List<String>> result = new HashMap<>();
         result.put("questions", questions);
         result.put("answers", answers);
         return result;
     }
+
 }

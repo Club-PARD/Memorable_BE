@@ -70,4 +70,14 @@ public class WorkSheetReadDTO {
                 .content(worksheet.getFile().getContent())
                 .build();
     }
+
+    public static WorkSheetReadDTO toBookmarkDTO(WorkSheet worksheet) {
+        return WorkSheetReadDTO.builder()
+                .worksheetId(worksheet.getId())
+                .name(worksheet.getName())
+                .category(worksheet.getFile().getCategory())
+                .worksheetBookmark(worksheet.isBookmark())
+                .worksheetCreate_date(worksheet.getCreated_date())
+                .build();
+    }
 }

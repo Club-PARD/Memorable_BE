@@ -25,7 +25,7 @@ public class WrongSheetController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<WrongSheetSimpleReadDTO>> getWrongSheetsByUserId(@PathVariable String userId) {
-        List<WrongSheetSimpleReadDTO> response = wrongSheetService.getWrongSheetsByUserId(Long.valueOf(userId));
+        List<WrongSheetSimpleReadDTO> response = wrongSheetService.getWrongSheetsByUserId(userId);
         return ResponseEntity.ok(response);
     }
 
@@ -33,6 +33,11 @@ public class WrongSheetController {
     public ResponseEntity<WrongSheetResponseDTO> getWrongSheetById(@PathVariable Long wrongsheetId) {
         WrongSheetResponseDTO response = wrongSheetService.getWrongSheetById(wrongsheetId);
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{wrongsheetId}")
+    public WrongSheetSimpleReadDTO toggleBookmark(@PathVariable Long wrongsheetId) {
+        return wrongSheetService.toggleBookmark(wrongsheetId);
     }
 
     @DeleteMapping("/{wrongsheetId}")

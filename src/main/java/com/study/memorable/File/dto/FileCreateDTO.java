@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FileCreateDTO {
     private String name;
-
     private String category;
-
     private String content;
-
     private String userId;
 }

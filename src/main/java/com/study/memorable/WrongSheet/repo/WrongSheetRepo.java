@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface WrongSheetRepo extends JpaRepository<WrongSheet, Long> {
     @Query("SELECT ws FROM WrongSheet ws WHERE ws.file.user.id = :userId")
-    List<WrongSheet> findByUserId(@Param("userId") Long userId);
+    List<WrongSheet> findByUserId(@Param("userId") String userId);
 }

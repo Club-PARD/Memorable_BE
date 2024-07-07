@@ -3,10 +3,7 @@ package com.study.memorable.Questions.entity;
 import com.study.memorable.File.entity.File;
 import com.study.memorable.Questions.dto.QuestionsCreateDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -20,6 +17,7 @@ public class Questions {
 
     private String questions;
     private String answers;
+    @Setter
     private String user_answers;
 
     @ManyToOne
@@ -39,10 +37,6 @@ public class Questions {
         this.questions = dto.getQuestions();
         this.answers = dto.getAnswers();
         this.user_answers = dto.getUser_answers();
-    }
-
-    public void setUser_answers(String user_answers) {
-        this.user_answers = user_answers;
     }
 
 }

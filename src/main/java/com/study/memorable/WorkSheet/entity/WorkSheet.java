@@ -41,7 +41,7 @@ public class WorkSheet {
     @JoinColumn(name = "file_id")
     private File file;
 
-    // 새로운 필드 추가
-    @Column(name = "is_make_test_sheet", nullable = false, columnDefinition = "boolean default true")
-    private boolean isMakeTestSheet = true;
+    // 변경된 필드 타입
+    @Column(name = "is_make_test_sheet", nullable = false)
+    private boolean isMakeTestSheet;
 }
