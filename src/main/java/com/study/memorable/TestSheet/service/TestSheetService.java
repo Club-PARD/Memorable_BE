@@ -82,42 +82,11 @@ public class TestSheetService {
     }
 
     @Transactional
-    public void updateUserAnswers(Long testsheetId, boolean isReExtracted, List<Boolean> isCompleteAllBlanks, List<String> userAnswers1, List<String> userAnswers2) {
-        TestSheet testSheet = testSheetRepo.findById(testsheetId)
-                .orElseThrow(() -> new RuntimeException("TestSheet not found"));
-
-        // Update test sheet attributes
-        testSheet.setReExtracted(isReExtracted);
-        testSheet.setCompleteAllBlanks(isCompleteAllBlanks);
-
-        // Fetch the questions for the test sheet
-        File file = testSheet.getFile();
-        List<Questions> questions = questionsRepo.findByFile(file);
-
-        if (isCompleteAllBlanks.get(0)) {
-            for (int i = 0; i < userAnswers1.size(); i++) {
-                Questions question = questions.get(i);
-                question.setUser_answers(userAnswers1.get(i));
-                questionsRepo.save(question);
-            }
-        }
-
-        if (isCompleteAllBlanks.get(1)) {
-            for (int i = 0; i < userAnswers2.size(); i++) {
-                Questions question = questions.get(i + 20);
-                question.setUser_answers(userAnswers2.get(i));
-                questionsRepo.save(question);
-            }
-        }
-    }
-
-    @Transactional
     public TestSheetUpdateDTO updateUserAnswers(Long testsheetId, TestSheetUpdateDTO userAnswersDTO) {
         TestSheet testSheet = testSheetRepo.findById(testsheetId)
                 .orElseThrow(() -> new RuntimeException("TestSheet not found"));
 
-        testSheet.setReExtracted(userAnswersDTO.isReExtracted());
-        testSheet.setCompleteAllBlanks(userAnswersDTO.getIsCompleteAllBlanks());
+//        testSheet.setCompleteAllBlanks(userAnswersDTO.getIsCompleteAllBlanks());
 
         File file = testSheet.getFile();
         List<Questions> questions = questionsRepo.findByFile(file);
@@ -131,6 +100,9 @@ public class TestSheetService {
                 Questions question = questions.get(i);
                 question.setUser_answers(userAnswersDTO.getUserAnswers1().get(i));
                 questionsRepo.save(question);
+                allQuestions.add(question.getQuestions());
+                allAnswers.add(question.getAnswers());
+                allUserAnswers.add(question.getUser_answers());
             }
         }
 
@@ -139,6 +111,9 @@ public class TestSheetService {
                 Questions question = questions.get(i + 20);
                 question.setUser_answers(userAnswersDTO.getUserAnswers2().get(i));
                 questionsRepo.save(question);
+                allQuestions.add(question.getQuestions());
+                allAnswers.add(question.getAnswers());
+                allUserAnswers.add(question.getUser_answers());
             }
         }
 
@@ -153,40 +128,18 @@ public class TestSheetService {
         Map<String, Object> scoringResult = openAIController.scoreAnswers(requestBody);
 
         testSheet.setScore((Integer) scoringResult.get("score"));
-        testSheet.setIsCorrect((List<Boolean>) scoringResult.get("isCorrect"));
+
+        // Ensure isCorrect is a List of Boolean
+        List<Boolean> isCorrectList = ((List<?>) scoringResult.get("isCorrect")).stream()
+                .map(o -> (Boolean) o)
+                .collect(Collectors.toList());
+
+        testSheet.setIsCorrect(isCorrectList);
 
         testSheetRepo.save(testSheet);
 
-        return TestSheetUpdateDTO.builder()
-//                .isReExtracted(testSheet.isReExtracted())
-//                .isCompleteAllBlanks(testSheet.getIsCompleteAllBlanks())
-                .score(testSheet.getScore())
-                .isCorrect(testSheet.getIsCorrect())
-                .build();
+        return TestSheetUpdateDTO.fromEntity(testSheet);
     }
-
-//    private Map<String, List<String>> parseResponseToQuestionsAndAnswers(String response) {
-//        String[] lines = response.split("\n");
-//        List<String> questions = new ArrayList<>();
-//        List<String> answers = new ArrayList<>();
-//
-//        for (int i = 0; i < lines.length; i++) {
-//            if (lines[i].startsWith("Q: ")) {
-//                String question = lines[i].replace("Q: ", "").trim();
-//                if (i + 1 < lines.length && lines[i + 1].startsWith("A: ")) {
-//                    String answer = lines[i + 1].replace("A: ", "").trim();
-//                    questions.add(question);
-//                    answers.add(answer);
-//                    i++; // Skip next line since it's the answer line
-//                }
-//            }
-//        }
-//
-//        Map<String, List<String>> result = new HashMap<>();
-//        result.put("questions", questions);
-//        result.put("answers", answers);
-//        return result;
-//    }
 
     private Map<String, List<Questions>> generateAndSaveQuestions(List<String> keywords, File file) {
         Map<String, List<String>> qaMap = processKeywordsWithService(keywords, file.getContent());

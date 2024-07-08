@@ -87,30 +87,23 @@ public class OpenAIService {
         String keywordList = String.join(", ", keywords);
         return String.format(
                 "### Situation ###\n" +
-                        "너는 학생들에게 학습을 도와주는 선생님이야.\n" +
-                        "너의 전공은 텍스트 주제에 맞는 전공이야. 예를 들어 텍스트가 사회학을 주제로 한다면 너는 사회학 교수야.\n" +
+                        "너는 아래 주어진 텍스트를 만든 교수야. 학생들에게 학습을 도와주는 역할을 해.\n" +
+                        "예를 들어 텍스트가 사회학을 주제로 한다면 너는 사회학 교수야.\n" +
                         "학생들에게 텍스트 범위 내에서 시험 문제를 출제해야 해. 문제의 답이 될 수 있는 문맥 상 중요한 키워드를 먼저 추출했어: %s\n" +
                         "### Instruction ###\n" +
-                        "Based on the provided text, generate 20 questions focusing on key concepts.\n" +
+                        "Based on the provided text, generate #20# questions focusing on key concepts.\n" +
                         "The purpose is to verify understanding of the text by learners.\n" +
                         "### Format ###\n" +
                         "1. Question: Formulate a question that allows the key concept (answer) to be inferred. Each questions' answer should be selected from the given list: [%s] Questions should be of a difficulty level suitable for university students.\n" +
-                        "문제의 난이도: 대학원생, 교수에 맞게 2. Answer: You must select answers from the provided keywords: %s\n" +
+                        "2. Answer: You must select answers from the provided keywords: %s\n" +
                         "Answers should not be duplicated. Use the exact form of the words in the list as the answer without any changes.\n" +
-                        "### Example ###\n" +
-                        "Text: '기독교가 역사에서 살아남음=기독교가 상황에 잘 적응하느냐?'\n" +
-                        "Q: 기독교가 역사에서 살아남은 것은 무엇과 관련이 있는가?\n" +
-                        "A: 상황 적응\n" +
-                        "Text: (컴퓨터가 사람에게 도움을 주는 텍스트의 일부 내용이라고 가정)\n" +
-                        "Q: 사람에게 도움을 준 도구로 언급된 것은?\n" +
-                        "A: 컴퓨터\n" +
                         "### 금지 형식 ###\n" +
                         "문장 형식은 절대 금지한다. 오로지 고유 명사 형태이어야 한다\n" +
-                        "문제를 생성할 때 '~ 중에서 하나는 무엇인가?'와 같이 여러 개의 답이 가능하면서 하나의 답만을 정답으로 인정하는 문제는 금지한다.\n" +
+                        "문제를 생성할 때 '~ 중에서 하나는 무엇인가?'와 같이 여러 개의 답이 가능해서 혼동을 야기하는 문제는 금지한다.\n" +
                         "### Guidelines ###\n" +
                         "1. Answers must not include particles.\n" +
                         "2. Questions and answers should not include any additional explanations or comments.\n" +
-                        "3. Questions must not contain the answer. Words that belong to the answers must never be included in the questions.\n" +
+                        "3. Each answers should not be contained in each questions. Words that belong to the answers must never be included in the questions.\n" +
                         "4. Ensure the quality of questions is excellent.\n" +
                         "5. Each question must clearly lead to a single, specific answer without ambiguity.\n" +
                         "6. Answers must not be duplicated. If duplicates are found, generate new questions and answers.\n" +
@@ -202,12 +195,22 @@ public class OpenAIService {
 
     private Map<String, Object> parseScoreResponse(String response) {
         Map<String, Object> result = new HashMap<>();
-        String[] parts = response.replace("<", "").replace(">", "").split(",");
+        // 전체 응답 문자열에서 < >를 제거하고 , 로 구분하여 분할
+        String[] parts = response.replace("<", "").replace(">", "").split(", ");
+        log.info("\n\n\n\nresult: " + Arrays.toString(parts));
+
+        // 첫 번째 부분을 score로 설정
         result.put("score", Integer.parseInt(parts[0].trim()));
-        result.put("isCorrect", Arrays.stream(parts[1].trim().split(" ")).map(Boolean::parseBoolean).collect(Collectors.toList()));
+        log.info("parts[0]: " + parts[0]);
+
+        List<Boolean> isCorrectList = Arrays.stream(parts, 1, parts.length)
+                .map(Boolean::parseBoolean)
+                .collect(Collectors.toList());
+        result.put("isCorrect", isCorrectList);
+
+        log.info("isCorrectList: " + isCorrectList);
         return result;
     }
-
 
 
 }

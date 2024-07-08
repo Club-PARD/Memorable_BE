@@ -43,4 +43,5 @@ public class OpenAIController {
         List<String> userAnswers = (List<String>) requestBody.get("userAnswers");
         return openAIService.scoreAnswers(content, questions, answers, userAnswers);
     }
+
 }

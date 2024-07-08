@@ -2,13 +2,16 @@ package com.study.memorable.TestSheet.entity;
 
 import com.study.memorable.File.entity.File;
 import com.study.memorable.TestSheet.dto.TestSheetCreateDTO;
+import com.study.memorable.config.ListBooleanConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Builder
@@ -37,11 +40,25 @@ public class TestSheet {
 
     private int score;
 
-    @ElementCollection
+    @Convert(converter = ListBooleanConverter.class)
     private List<Boolean> isCorrect;
 
-    public void setCompleteAllBlanks(List<Boolean> isCompleteAllBlanks) {
-        this.isCompleteAllBlanks = isCompleteAllBlanks;
+    @PrePersist
+    protected void onCreate() {
+        if (this.isCorrect == null) {
+            this.isCorrect = new ArrayList<>(Collections.nCopies(20, false));
+        }
+    }
+
+    public List<Boolean> getIsCorrect() {
+        if (this.isCorrect == null || this.isCorrect.isEmpty()) {
+            return new ArrayList<>(Collections.nCopies(20, false));
+        }
+        return this.isCorrect;
+    }
+
+    public void setIsCorrect(List<Boolean> isCorrect) {
+        this.isCorrect = isCorrect;
     }
 
     public static TestSheet toEntity(TestSheetCreateDTO dto, File file){
