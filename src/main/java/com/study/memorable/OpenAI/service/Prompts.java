@@ -87,7 +87,7 @@ public class Prompts {
             prompt.append(String.format("Q%d: %s\nA: %s\nUser Answer: %s\n\n", i + 1, questions.get(i), answers.get(i), userAnswers.get(i)));
         }
 
-        prompt.append("Return the results in the format <score, isCorrect> where score is an integer and isCorrect is a list of 3 boolean values.\n 다른 부연설명을 일체 하지 말고 정해진 형식만 출력해줘.");
+        prompt.append("Return the results in the format <score, isCorrect> where score is an integer and isCorrect is a list of 20 boolean values.\n 다른 부연설명을 일체 하지 말고 정해진 형식만 출력해줘.");
         return prompt.toString();
     }
 }

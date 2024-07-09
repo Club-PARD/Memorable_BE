@@ -34,7 +34,7 @@ public class TestSheetService {
     private final QuestionsRepo questionsRepo;
     private final OpenAIController openAIController;
 
-    int len=3;
+    int len = 3;
 
     @Transactional
     public TestSheetReadDTO createTestSheet(Long worksheetId) {
