@@ -43,9 +43,7 @@ public class WorkSheetService {
 
         List<String> keywords = file.getKeyword();
 
-        // 홀수 키워드 가져오기
         List<String> oddKeywords = getKeywordsByIndex(keywords, true);
-        // 짝수 키워드 가져오기
         List<String> evenKeywords = getKeywordsByIndex(keywords, false);
 
         // GPT API를 사용하여 키워드로부터 문제와 답을 생성
@@ -80,22 +78,23 @@ public class WorkSheetService {
 
     private List<String> generateAnswersFromKeywords(List<String> keywords, String content) {
         List<String> arr = new ArrayList<>();
-        StringBuilder replacedText = new StringBuilder();
+//        StringBuilder replacedText = new StringBuilder();
+
         String[] words = content.split("\\s+");
 
         for (String word : words) {
-            boolean isKeyword = false;
+//            boolean isKeyword = false;
             for (String key : keywords) {
                 if (word.contains(key)) {
-                    replacedText.append(word.replace(key, "_____")).append(" ");
+//                    replacedText.append(word.replace(key, "_____")).append(" ");
                     arr.add(key);
-                    isKeyword = true;
+//                    isKeyword = true;
                     break;
                 }
             }
-            if (!isKeyword) {
-                replacedText.append(word).append(" ");
-            }
+//            if (!isKeyword) {
+//                replacedText.append(word).append(" ");
+//            }
         }
 
         return arr;

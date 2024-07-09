@@ -138,7 +138,6 @@ public class OpenAIService {
         for(int i = 0; i < parts.length; i++)
             log.info("parts: " + parts[i]);
 
-        // 두 번째 부분을 isCorrect로 설정
         String[] boolValues = parts[1].split(", ");
         List<Boolean> isCorrectList = Arrays.stream(boolValues)
                 .map(Boolean::parseBoolean)

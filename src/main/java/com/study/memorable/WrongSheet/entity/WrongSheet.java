@@ -28,7 +28,7 @@ public class WrongSheet {
     private File file;
 
     @OneToMany(mappedBy = "wrongSheet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WrongSheetQuestion> wrongSheetQuestions = new ArrayList<>();
+    private List<WrongSheetQuestion> wrongSheetQuestions;//= new ArrayList<>();
 
     @Convert(converter = ListStringConverter.class)
     @Column(columnDefinition = "TEXT")

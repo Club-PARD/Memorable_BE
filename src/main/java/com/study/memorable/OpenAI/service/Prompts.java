@@ -6,6 +6,8 @@ import java.util.List;
 
 @Slf4j
 public class Prompts {
+
+    static final int questions_num = 3;
     public static String extractKeywordsPrompt(int len, String text) {
         return String.format(
                 "### Situation ###\n" +
@@ -37,12 +39,14 @@ public class Prompts {
                         "예를 들어 텍스트가 사회학을 주제로 한다면 너는 사회학 교수야.\n" +
                         "학생들에게 텍스트 범위 내에서 시험 문제를 출제해야 해. 문제의 답이 될 수 있는 문맥 상 중요한 키워드를 먼저 추출했어: %s\n" +
                         "### Instruction ###\n" +
-                        "Based on the provided text, generate #20# questions focusing on key concepts.\n" +
+                        "Based on the provided text, generate #3# questions focusing on key concepts.\n" +
                         "The purpose is to verify understanding of the text by learners.\n" +
                         "### Format ###\n" +
                         "1. Question: Formulate a question that allows the key concept (answer) to be inferred. Each questions' answer should be selected from the given list: [%s] Questions should be of a difficulty level suitable for university students.\n" +
+                        "text를 읽지 않고도 풀 수있을만큼의 뻔한 문제는 안돼!" +
                         "2. Answer: You must select answers from the provided keywords: %s\n" +
                         "Answers should not be duplicated. Use the exact form of the words in the list as the answer without any changes.\n" +
+                        "text를 읽지 않고도 풀 수있을만큼의 뻔한 정답는 안돼! 정답은 무조건 이 안에서 추출해:%s" +
                         "### 금지 형식 ###\n" +
                         "문장 형식은 절대 금지한다. 오로지 고유 명사 형태이어야 한다\n" +
                         "문제를 생성할 때 '~ 중에서 하나는 무엇인가?'와 같이 여러 개의 답이 가능해서 혼동을 야기하는 문제는 금지한다.\n" +
@@ -58,31 +62,32 @@ public class Prompts {
                         "9. Extracted questions should be in Korean.\n" +
                         "10. 문제를 생성할 때, 정답이 특정 카테고리 안에서 고를 수 있는 정답이라면, 문제에서 그 카테고리를 언급해줘. 물론, 그 문제 내에서 정답이 직접적으로 언급되면 안돼.\n" +
                         "출력 형식: 질문은 Q: 로 시작하고, 답변은 A: 로 시작해야 한다. 질문과 답변은 각각 개행없이 연속으로 작성되어야 한다. ##문제 앞에 번호 절대 붙이지 마!!!## (문제+답)의 리스트 정답은 중복되면 안돼. 정답은 무조건 이 안에서 추출해야 해 : %s\n" +
-                        "문제는 꼭 unique한 20문제여야 해!"+
+                        "문제와 답은 꼭 unique한 %d문제여야 해!"+
+                        "절대 문제 안에 정답에 들어갈 문자열이 들어가서는 안돼!" +
                         "### Text ###\n" +
                         "%s",
-                keywordList, keywordList, keywordList, keywordList, text
+                keywordList, keywordList, keywordList, keywordList, keywordList, questions_num,  text
         );
     }
 
     public static String scoreAnswersPrompt(String content, List<String> questions, List<String> answers, List<String> userAnswers) {
         StringBuilder prompt = new StringBuilder(String.format(
 //                "Please grade the following set of 20 questions and answers. " +
-                "Please grade the following set of 3 questions and answers. " +
+                "Please grade the following set of %d questions and answers. " +
                         "Read the content and understand its context. " +
                         "Compare each answer and user answer against the content and questions. " +
                         "If the user's answer is similar to the actual answer based on the content and questions, mark it as correct. " +
                         "Increment the score by 1 for each correct answer and change the corresponding index in 'isCorrect' to true.\n\n" +
                         "Content: %s\n\n" +
-                        "Questions and Answers:\n\n", content
+                        "Questions and Answers:\n\n", questions_num, content
         ));
 
         for (int i = 0; i < questions.size(); i++) {
-            log.info("Q"+": %s\nA: %s\nUser Answer: %s\n\n" + questions.get(i), answers.get(i), userAnswers.get(i));
+            log.info("Q: "+questions.get(i)+"\nA: "+ answers.get(i) + "\nUser Answer: " + userAnswers.get(i));
             prompt.append(String.format("Q%d: %s\nA: %s\nUser Answer: %s\n\n", i + 1, questions.get(i), answers.get(i), userAnswers.get(i)));
         }
 
-        prompt.append("Return the results in the format <score, isCorrect> where score is an integer and isCorrect is a list of 20 boolean values.\n 다른 부연설명을 일체 하지 말고 정해진 형식만 출력해줘.");
+        prompt.append("Return the results in the format <score, isCorrect> where score is an integer and isCorrect is a list of 3 boolean values.\n 다른 부연설명을 일체 하지 말고 정해진 형식만 출력해줘.");
         return prompt.toString();
     }
 }

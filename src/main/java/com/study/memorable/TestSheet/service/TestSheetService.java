@@ -34,6 +34,8 @@ public class TestSheetService {
     private final QuestionsRepo questionsRepo;
     private final OpenAIController openAIController;
 
+    int len=3;
+
     @Transactional
     public TestSheetReadDTO createTestSheet(Long worksheetId) {
         WorkSheet worksheet = workSheetRepo.findById(worksheetId)
@@ -75,7 +77,8 @@ public class TestSheetService {
                 .isCompleteAllBlanks(Arrays.asList(false, false))
                 .created_date(LocalDateTime.now())
                 .score(Arrays.asList(0, 0))
-                .isCorrect(new ArrayList<>(Collections.nCopies(40, false)))
+                .isCorrect(new ArrayList<>(Collections.nCopies((2*len), false)))
+//                .isCorrect(new ArrayList<>(Collections.nCopies(40, false)))
                 .build();
         testSheetRepo.save(testSheet);
 
@@ -105,7 +108,8 @@ public class TestSheetService {
         }
 
         if (isUserAnswers2Complete) {
-            processUserAnswers(testSheet, userAnswersDTO.getUserAnswers2(), 20);
+            processUserAnswers(testSheet, userAnswersDTO.getUserAnswers2(), len);
+//            processUserAnswers(testSheet, userAnswersDTO.getUserAnswers2(), 20);
         }
 
         if (isUserAnswers1Reverted || isUserAnswers2Reverted) {
@@ -163,14 +167,16 @@ public class TestSheetService {
         File file = testSheet.getFile();
         List<Questions> questions = questionsRepo.findByFile(file);
 
-        for (int i = 0; i < 20; i++) {
+//        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < len; i++) {
             Questions question1 = questions.get(i);
             if (!requestIsCompleteAllBlanks.get(0)) {
                 question1.setUser_answers("");
             }
             questionsRepo.save(question1);
 
-            Questions question2 = questions.get(i + 20);
+//            Questions question2 = questions.get(i + 20);
+            Questions question2 = questions.get(i + len);
             if (!requestIsCompleteAllBlanks.get(1)) {
                 question2.setUser_answers("");
             }
@@ -224,14 +230,24 @@ public class TestSheetService {
         File file = testSheet.getFile();
         List<Questions> questions = questionsRepo.findByFile(file);
 
+//        List<QuestionsReadDTO> questions1 = questions.stream()
+//                .limit(20)
+//                .map(this::toQuestionsReadDTO)
+//                .collect(Collectors.toList());
+//
+//        List<QuestionsReadDTO> questions2 = questions.stream()
+//                .skip(20)
+//                .limit(20)
+//                .map(this::toQuestionsReadDTO)
+//                .collect(Collectors.toList());
         List<QuestionsReadDTO> questions1 = questions.stream()
-                .limit(20)
+                .limit(len)
                 .map(this::toQuestionsReadDTO)
                 .collect(Collectors.toList());
 
         List<QuestionsReadDTO> questions2 = questions.stream()
-                .skip(20)
-                .limit(20)
+                .skip(len)
+                .limit(len)
                 .map(this::toQuestionsReadDTO)
                 .collect(Collectors.toList());
 
