@@ -3,6 +3,7 @@ package com.study.memorable.TestSheet.entity;
 import com.study.memorable.File.entity.File;
 import com.study.memorable.TestSheet.dto.TestSheetCreateDTO;
 import com.study.memorable.config.ListBooleanConverter;
+import com.study.memorable.config.ListIntegerConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Builder
@@ -31,6 +31,7 @@ public class TestSheet {
 
     @Setter
     private boolean bookmark;
+
     private boolean isReExtracted;
 
     @ElementCollection
@@ -38,38 +39,51 @@ public class TestSheet {
 
     private LocalDateTime created_date;
 
-    private int score;
+    @Convert(converter = ListIntegerConverter.class)
+    @Column(columnDefinition = "VARCHAR(20)")
+    private List<Integer> score;
 
     @Convert(converter = ListBooleanConverter.class)
+    @Column(columnDefinition = "TEXT")
     private List<Boolean> isCorrect;
 
     @PrePersist
     protected void onCreate() {
         if (this.isCorrect == null) {
-            this.isCorrect = new ArrayList<>(Collections.nCopies(20, false));
+            this.isCorrect = new ArrayList<>(Collections.nCopies(40, false));
+        }
+        if (this.score == null) {
+            this.score = Arrays.asList(0, 0);
         }
     }
 
     public List<Boolean> getIsCorrect() {
         if (this.isCorrect == null || this.isCorrect.isEmpty()) {
-            return new ArrayList<>(Collections.nCopies(20, false));
+            return new ArrayList<>(Collections.nCopies(40, false));
         }
         return this.isCorrect;
     }
 
-    public void setIsCorrect(List<Boolean> isCorrect) {
-        this.isCorrect = isCorrect;
+    public List<Integer> getScore() {
+        if (this.score == null || this.score.isEmpty()) {
+            return Arrays.asList(0, 0);
+        }
+        return this.score;
     }
 
-    public static TestSheet toEntity(TestSheetCreateDTO dto, File file){
+//    public boolean isReExtracted() {
+//        return isReExtracted;
+//    }
+
+    public static TestSheet toEntity(TestSheetCreateDTO dto, File file) {
         return TestSheet.builder()
                 .file(file)
                 .bookmark(dto.isBookmark())
                 .created_date(LocalDateTime.now())
                 .isReExtracted(dto.isReExtracted())
                 .isCompleteAllBlanks(dto.getIsCompleteAllBlanks())
-                .score(0)
-                .isCorrect(new ArrayList<>(Collections.nCopies(20, false)))
+                .score(Arrays.asList(0, 0))
+                .isCorrect(new ArrayList<>(Collections.nCopies(40, false)))
                 .build();
     }
 }

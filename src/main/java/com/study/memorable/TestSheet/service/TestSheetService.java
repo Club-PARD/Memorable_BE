@@ -30,7 +30,6 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class TestSheetService {
     private final TestSheetRepo testSheetRepo;
-    private final FileRepo fileRepo;
     private final WorkSheetRepo workSheetRepo;
     private final QuestionsRepo questionsRepo;
     private final OpenAIController openAIController;
@@ -75,6 +74,8 @@ public class TestSheetService {
                 .bookmark(false)
                 .isCompleteAllBlanks(Arrays.asList(false, false))
                 .created_date(LocalDateTime.now())
+                .score(Arrays.asList(0, 0))
+                .isCorrect(new ArrayList<>(Collections.nCopies(40, false)))
                 .build();
         testSheetRepo.save(testSheet);
 
@@ -86,8 +87,38 @@ public class TestSheetService {
         TestSheet testSheet = testSheetRepo.findById(testsheetId)
                 .orElseThrow(() -> new RuntimeException("TestSheet not found"));
 
-//        testSheet.setCompleteAllBlanks(userAnswersDTO.getIsCompleteAllBlanks());
+        // Update isReExtracted
+        testSheet.setReExtracted(userAnswersDTO.isReExtracted());
 
+        // Update isCompleteAllBlanks
+        List<Boolean> currentIsCompleteAllBlanks = testSheet.getIsCompleteAllBlanks();
+        List<Boolean> requestIsCompleteAllBlanks = userAnswersDTO.getIsCompleteAllBlanks();
+
+        boolean isUserAnswers1Complete = requestIsCompleteAllBlanks.get(0) && !currentIsCompleteAllBlanks.get(0);
+        boolean isUserAnswers2Complete = requestIsCompleteAllBlanks.get(1) && !currentIsCompleteAllBlanks.get(1);
+
+        boolean isUserAnswers1Reverted = !requestIsCompleteAllBlanks.get(0) && currentIsCompleteAllBlanks.get(0);
+        boolean isUserAnswers2Reverted = !requestIsCompleteAllBlanks.get(1) && currentIsCompleteAllBlanks.get(1);
+
+        if (isUserAnswers1Complete) {
+            processUserAnswers(testSheet, userAnswersDTO.getUserAnswers1(), 0);
+        }
+
+        if (isUserAnswers2Complete) {
+            processUserAnswers(testSheet, userAnswersDTO.getUserAnswers2(), 20);
+        }
+
+        if (isUserAnswers1Reverted || isUserAnswers2Reverted) {
+            revertUserAnswers(testSheet, requestIsCompleteAllBlanks);
+        }
+
+        testSheet.setIsCompleteAllBlanks(requestIsCompleteAllBlanks);
+        testSheetRepo.save(testSheet);
+
+        return TestSheetUpdateDTO.fromEntity(testSheet);
+    }
+
+    private void processUserAnswers(TestSheet testSheet, List<String> userAnswers, int startIdx) {
         File file = testSheet.getFile();
         List<Questions> questions = questionsRepo.findByFile(file);
 
@@ -95,29 +126,18 @@ public class TestSheetService {
         List<String> allAnswers = new ArrayList<>();
         List<String> allUserAnswers = new ArrayList<>();
 
-        if (userAnswersDTO.getIsCompleteAllBlanks().get(0)) {
-            for (int i = 0; i < userAnswersDTO.getUserAnswers1().size(); i++) {
-                Questions question = questions.get(i);
-                question.setUser_answers(userAnswersDTO.getUserAnswers1().get(i));
-                questionsRepo.save(question);
-                allQuestions.add(question.getQuestions());
-                allAnswers.add(question.getAnswers());
-                allUserAnswers.add(question.getUser_answers());
-            }
+        List<Boolean> isCorrectList = testSheet.getIsCorrect();
+        List<Integer> scoreList = testSheet.getScore();
+
+        for (int i = 0; i < userAnswers.size(); i++) {
+            Questions question = questions.get(i + startIdx);
+            question.setUser_answers(userAnswers.get(i));
+            questionsRepo.save(question);
+            allQuestions.add(question.getQuestions());
+            allAnswers.add(question.getAnswers());
+            allUserAnswers.add(question.getUser_answers());
         }
 
-        if (userAnswersDTO.getIsCompleteAllBlanks().get(1)) {
-            for (int i = 0; i < userAnswersDTO.getUserAnswers2().size(); i++) {
-                Questions question = questions.get(i + 20);
-                question.setUser_answers(userAnswersDTO.getUserAnswers2().get(i));
-                questionsRepo.save(question);
-                allQuestions.add(question.getQuestions());
-                allAnswers.add(question.getAnswers());
-                allUserAnswers.add(question.getUser_answers());
-            }
-        }
-
-        // Create a request body for the API call
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("content", file.getContent());
         requestBody.put("questions", allQuestions);
@@ -127,19 +147,37 @@ public class TestSheetService {
         // Call the scoreAnswers API
         Map<String, Object> scoringResult = openAIController.scoreAnswers(requestBody);
 
-        testSheet.setScore((Integer) scoringResult.get("score"));
+        int scoreIndex = startIdx == 0 ? 0 : 1;
+        scoreList.set(scoreIndex, (Integer) scoringResult.get("score"));
 
-        // Ensure isCorrect is a List of Boolean
-        List<Boolean> isCorrectList = ((List<?>) scoringResult.get("isCorrect")).stream()
-                .map(o -> (Boolean) o)
-                .collect(Collectors.toList());
+        List<Boolean> tempIsCorrect = (List<Boolean>) scoringResult.get("isCorrect");
+        for (int i = 0; i < tempIsCorrect.size(); i++) {
+            isCorrectList.set(i + startIdx, tempIsCorrect.get(i));
+        }
 
+        testSheet.setScore(scoreList);
         testSheet.setIsCorrect(isCorrectList);
-
-        testSheetRepo.save(testSheet);
-
-        return TestSheetUpdateDTO.fromEntity(testSheet);
     }
+
+    private void revertUserAnswers(TestSheet testSheet, List<Boolean> requestIsCompleteAllBlanks) {
+        File file = testSheet.getFile();
+        List<Questions> questions = questionsRepo.findByFile(file);
+
+        for (int i = 0; i < 20; i++) {
+            Questions question1 = questions.get(i);
+            if (!requestIsCompleteAllBlanks.get(0)) {
+                question1.setUser_answers("");
+            }
+            questionsRepo.save(question1);
+
+            Questions question2 = questions.get(i + 20);
+            if (!requestIsCompleteAllBlanks.get(1)) {
+                question2.setUser_answers("");
+            }
+            questionsRepo.save(question2);
+        }
+    }
+
 
     private Map<String, List<Questions>> generateAndSaveQuestions(List<String> keywords, File file) {
         Map<String, List<String>> qaMap = processKeywordsWithService(keywords, file.getContent());

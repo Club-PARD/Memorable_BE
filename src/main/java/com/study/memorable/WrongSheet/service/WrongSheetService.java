@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,38 +28,65 @@ public class WrongSheetService {
 
     @Transactional
     public WrongSheetResponseDTO createWrongSheet(WrongSheetCreateDTO dto) {
-        List<Questions> questions = questionsRepo.findAllById(dto.getQuestions().stream()
+        List<Long> questionIds = dto.getQuestions().stream()
                 .map(WrongSheetCreateDTO.QuestionDTO::getQuestionId)
-                .collect(Collectors.toList()));
-
-        List<String> questionIds = questions.stream()
-                .map(question -> String.valueOf(question.getId()))
                 .collect(Collectors.toList());
+
+        List<Questions> questions = questionsRepo.findAllById(questionIds);
+
+        if (questions.isEmpty()) {
+            throw new RuntimeException("No questions found for the given IDs");
+        }
 
         File file = questions.get(0).getFile();
+        Optional<WrongSheet> existingWrongSheetOptional = wrongSheetRepo.findByFile(file);
 
-        WrongSheet wrongSheet = WrongSheet.builder()
-                .file(file)
-                .bookmark(false)
-                .created_date(LocalDateTime.now())
-                .questionIds(questionIds)
-                .build();
-        wrongSheetRepo.save(wrongSheet);
+        WrongSheet wrongSheet;
+        if (existingWrongSheetOptional.isPresent()) {
+            wrongSheet = existingWrongSheetOptional.get();
+            List<Long> existingQuestionIds = wrongSheet.getQuestionIds().stream()
+                    .map(Long::parseLong)
+                    .collect(Collectors.toList());
+            existingQuestionIds.addAll(questionIds);
+            List<Long> updatedQuestionIds = existingQuestionIds.stream().distinct().sorted().collect(Collectors.toList());
+            wrongSheet.setQuestionIds(updatedQuestionIds.stream().map(String::valueOf).collect(Collectors.toList()));
 
-        final WrongSheet finalWrongSheet = wrongSheet;
+            // 새로운 질문만 추가
+            List<Questions> newQuestions = questions.stream()
+                    .filter(question -> !existingQuestionIds.contains(question.getId()))
+                    .toList();
 
-        List<WrongSheetQuestion> wrongSheetQuestions = questions.stream()
-                .map(question -> WrongSheetQuestion.builder()
-                        .wrongSheet(finalWrongSheet)
-                        .question(question)
-                        .build())
-                .collect(Collectors.toList());
+            List<WrongSheetQuestion> newWrongSheetQuestions = newQuestions.stream()
+                    .map(question -> WrongSheetQuestion.builder()
+                            .wrongSheet(wrongSheet)
+                            .question(question)
+                            .build())
+                    .collect(Collectors.toList());
 
-        wrongSheetQuestionRepo.saveAll(wrongSheetQuestions);
+            wrongSheet.getWrongSheetQuestions().addAll(newWrongSheetQuestions);
+            wrongSheetQuestionRepo.saveAll(newWrongSheetQuestions);
+        } else {
+            wrongSheet = WrongSheet.builder()
+                    .file(file)
+                    .bookmark(false)
+                    .created_date(LocalDateTime.now())
+                    .questionIds(questionIds.stream().sorted().map(String::valueOf).collect(Collectors.toList()))
+                    .build();
 
-        finalWrongSheet.setWrongSheetQuestions(wrongSheetQuestions);
+            wrongSheetRepo.save(wrongSheet);
 
-        return WrongSheetResponseDTO.toDTO(finalWrongSheet);
+            List<WrongSheetQuestion> wrongSheetQuestions = questions.stream()
+                    .map(question -> WrongSheetQuestion.builder()
+                            .wrongSheet(wrongSheet)
+                            .question(question)
+                            .build())
+                    .collect(Collectors.toList());
+
+            wrongSheet.setWrongSheetQuestions(wrongSheetQuestions);
+            wrongSheetQuestionRepo.saveAll(wrongSheetQuestions);
+        }
+
+        return WrongSheetResponseDTO.toDTO(wrongSheet);
     }
 
     @Transactional(readOnly = true)

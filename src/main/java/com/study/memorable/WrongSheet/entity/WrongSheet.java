@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,7 @@ public class WrongSheet {
     private File file;
 
     @OneToMany(mappedBy = "wrongSheet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WrongSheetQuestion> wrongSheetQuestions;
+    private List<WrongSheetQuestion> wrongSheetQuestions = new ArrayList<>();
 
     @Convert(converter = ListStringConverter.class)
     @Column(columnDefinition = "TEXT")

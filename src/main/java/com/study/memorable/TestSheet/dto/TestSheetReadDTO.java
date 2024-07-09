@@ -1,6 +1,7 @@
 package com.study.memorable.TestSheet.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.study.memorable.Questions.dto.QuestionsReadDTO;
 import com.study.memorable.TestSheet.entity.TestSheet;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class TestSheetReadDTO {
     private String category;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("isReExtracted")
     private boolean isReExtracted;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
