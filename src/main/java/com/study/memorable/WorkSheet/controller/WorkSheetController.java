@@ -4,6 +4,7 @@ import com.study.memorable.File.dto.FileCreateDTO;
 import com.study.memorable.WorkSheet.dto.WorkSheetReadDTO;
 import com.study.memorable.WorkSheet.service.WorkSheetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,12 +62,11 @@ public class WorkSheetController {
     }
 
     @PatchMapping("/edit/{worksheetId}")
-    public String updateFileName(@PathVariable Long worksheetId, @RequestBody Map<String, String> request) {
+    public ResponseEntity<String> updateFileName(@PathVariable Long worksheetId, @RequestBody Map<String, String> request) {
         String name = request.get("name");
         workSheetService.updateFileName(worksheetId, name);
-        return "File NameUpdated!";
+        return ResponseEntity.ok("File Name Updated!");
     }
-
 
     @DeleteMapping("/{worksheetId}")
     public void deleteWorksheet(@PathVariable Long worksheetId) {

@@ -3,6 +3,7 @@ package com.study.memorable.WorkSheet.service;
 import com.study.memorable.File.dto.FileCreateDTO;
 import com.study.memorable.File.entity.File;
 import com.study.memorable.File.repo.FileRepo;
+import com.study.memorable.TestSheet.entity.TestSheet;
 import com.study.memorable.User.entity.User;
 import com.study.memorable.User.repo.UserRepo;
 import com.study.memorable.WorkSheet.dto.WorkSheetReadDTO;
@@ -35,14 +36,17 @@ public class WorkSheetService {
         User user = userRepo.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        String content = dto.getContent().replace("\n", " ");
+
         File file = fileRepo.save(File.builder()
                 .file_name(dto.getName())
                 .category(dto.getCategory())
-                .content(dto.getContent())
-                .keyword(openAIController.extractKeywordsFromContent(dto.getContent()))
+                .content(content)
+                .keyword(openAIController.extractKeywordsFromContent(content))
                 .created_date(LocalDateTime.now())
                 .user(user)
                 .build());
+
 
         List<String> keywords = file.getKeyword();
 
@@ -62,7 +66,6 @@ public class WorkSheetService {
                 .answer2(answer2)
                 .created_date(LocalDateTime.now())
                 .recent_date(LocalDateTime.now())
-                .name(dto.getName())
                 .build();
         workSheetRepo.save(workSheet);
 

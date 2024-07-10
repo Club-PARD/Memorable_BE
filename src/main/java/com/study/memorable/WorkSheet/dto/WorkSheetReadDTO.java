@@ -48,7 +48,7 @@ public class WorkSheetReadDTO {
     public static WorkSheetReadDTO toBasicDTO(WorkSheet worksheet) {
         return WorkSheetReadDTO.builder()
                 .worksheetId(worksheet.getId())
-                .name(worksheet.getName())
+                .name(worksheet.getFile().getFile_name())
                 .category(worksheet.getFile().getCategory())
                 .worksheetBookmark(worksheet.isBookmark())
                 .worksheetCreate_date(worksheet.getCreated_date())
@@ -60,7 +60,7 @@ public class WorkSheetReadDTO {
     public static WorkSheetReadDTO toFullDTO(WorkSheet worksheet) {
         return WorkSheetReadDTO.builder()
                 .worksheetId(worksheet.getId())
-                .name(worksheet.getName())
+                .name(worksheet.getFile().getFile_name())
                 .category(worksheet.getFile().getCategory())
                 .isCompleteAllBlanks(worksheet.isCompleteAllBlanks())
                 .isAddWorksheet(worksheet.isAddWorksheet())
@@ -74,7 +74,7 @@ public class WorkSheetReadDTO {
     public static WorkSheetReadDTO toBookmarkDTO(WorkSheet worksheet) {
         return WorkSheetReadDTO.builder()
                 .worksheetId(worksheet.getId())
-                .name(worksheet.getName())
+                .name(worksheet.getFile().getFile_name())
                 .category(worksheet.getFile().getCategory())
                 .worksheetBookmark(worksheet.isBookmark())
                 .worksheetCreate_date(worksheet.getCreated_date())

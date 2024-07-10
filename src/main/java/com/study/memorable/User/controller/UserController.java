@@ -17,9 +17,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("")
-    public String create(@RequestBody UserCreateDTO dto) {
-        userService.createUser(dto);
-        return "Success";
+    public ResponseEntity<String> create(@RequestBody UserCreateDTO dto) {
+        try {
+            userService.createUser(dto);
+            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("")
@@ -33,7 +37,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id){
-        userService.deleteUser(id);
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
+        try {
+            userService.deleteUser(id);
+            return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
