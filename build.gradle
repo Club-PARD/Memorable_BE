@@ -15,7 +15,7 @@ java {
 }
 
 application {
-	mainClass = 'com.study.memorable.MemorableApplication' // 수정
+	mainClass = 'com.study.memorable.MemorableApplication'
 }
 
 configurations {
