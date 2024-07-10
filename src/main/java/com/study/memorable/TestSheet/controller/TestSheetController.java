@@ -48,6 +48,13 @@ public class TestSheetController {
         return ResponseEntity.ok(updatedTestSheet);
     }
 
+    @PatchMapping("/edit/{testsheetId}")
+    public String updateFileName(@PathVariable Long testsheetId, @RequestBody Map<String, String> request) {
+        String name = request.get("name");
+        testSheetService.updateFileName(testsheetId, name);
+        return "File Name Updated!";
+    }
+
     @DeleteMapping("/{testsheetId}")
     public void deleteTestSheet(@PathVariable Long testsheetId) {
         testSheetService.deleteTestSheet(testsheetId);

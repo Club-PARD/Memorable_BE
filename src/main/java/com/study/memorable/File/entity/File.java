@@ -48,16 +48,16 @@ public class File {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<WorkSheet> worksheets;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<TestSheet> testSheets;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<WrongSheet> wrongSheets;
 
-    @OneToMany(mappedBy = "file", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "file", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Questions> questions;
 
     public static File toEntity(FileCreateDTO dto, User user) {

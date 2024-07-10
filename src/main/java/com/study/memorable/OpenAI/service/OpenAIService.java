@@ -126,7 +126,6 @@ public class OpenAIService {
     private Map<String, Object> parseScoreResponse(String response) {
         Map<String, Object> result = new HashMap<>();
 
-        // 전체 응답 문자열에서 <>를 제거하고, 괄호 내의 내용을 분할
         String cleanedResponse = response.replace("<", "").replace(">", "").trim();
         String[] parts = cleanedResponse.split("\\[|\\]");
         log.info("\n\n\n\nresult: " + Arrays.toString(parts));

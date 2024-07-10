@@ -4,6 +4,8 @@ import com.study.memorable.User.dto.UserCreateDTO;
 import com.study.memorable.User.dto.UserReadDTO;
 import com.study.memorable.User.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +19,7 @@ public class UserController {
     @PostMapping("")
     public String create(@RequestBody UserCreateDTO dto) {
         userService.createUser(dto);
-        return "유저 생성됨!";
+        return "Success";
     }
 
     @GetMapping("")
@@ -31,8 +33,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable String id){
+    public void deleteUser(@PathVariable String id){
         userService.deleteUser(id);
-        return "유저 삭제됨!";
     }
 }

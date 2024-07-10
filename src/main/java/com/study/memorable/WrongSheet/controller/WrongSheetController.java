@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class WrongSheetController {
 
     private final WrongSheetService wrongSheetService;
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<WrongSheetResponseDTO> createWrongSheet(@RequestBody WrongSheetCreateDTO dto) {
         WrongSheetResponseDTO response = wrongSheetService.createWrongSheet(dto);
         return ResponseEntity.ok(response);
@@ -38,6 +39,13 @@ public class WrongSheetController {
     @PatchMapping("/{wrongsheetId}")
     public WrongSheetSimpleReadDTO toggleBookmark(@PathVariable Long wrongsheetId) {
         return wrongSheetService.toggleBookmark(wrongsheetId);
+    }
+
+    @PatchMapping("/edit/{wrongsheetId}")
+    public String updateFileName(@PathVariable Long wrongsheetId, @RequestBody Map<String, String> request){
+        String name = request.get("name");
+        wrongSheetService.updateFileName(wrongsheetId, name);
+        return "File Name, Updated!";
     }
 
     @DeleteMapping("/{wrongsheetId}")

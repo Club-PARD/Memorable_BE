@@ -28,7 +28,7 @@ public class User {
     @CreatedDate
     private LocalDateTime created_date;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<File> files;
 
     public static User toEntity(UserCreateDTO dto){

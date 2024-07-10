@@ -1,8 +1,10 @@
 package com.study.memorable.WrongSheet.service;
 
 import com.study.memorable.File.entity.File;
+import com.study.memorable.File.repo.FileRepo;
 import com.study.memorable.Questions.Repo.QuestionsRepo;
 import com.study.memorable.Questions.entity.Questions;
+import com.study.memorable.TestSheet.entity.TestSheet;
 import com.study.memorable.WrongSheet.dto.WrongSheetCreateDTO;
 import com.study.memorable.WrongSheet.dto.WrongSheetResponseDTO;
 import com.study.memorable.WrongSheet.dto.WrongSheetSimpleReadDTO;
@@ -25,6 +27,7 @@ public class WrongSheetService {
     private final WrongSheetRepo wrongSheetRepo;
     private final WrongSheetQuestionRepo wrongSheetQuestionRepo;
     private final QuestionsRepo questionsRepo;
+    private final FileRepo fileRepo;
 
     @Transactional
     public WrongSheetResponseDTO createWrongSheet(WrongSheetCreateDTO dto) {
@@ -111,6 +114,15 @@ public class WrongSheetService {
         wrongSheet.setBookmark(!wrongSheet.isBookmark());
         wrongSheetRepo.save(wrongSheet);
         return WrongSheetSimpleReadDTO.toSimpleDTO(wrongSheet);
+    }
+
+    @Transactional
+    public void updateFileName(Long wrongsheetId, String name){
+        WrongSheet wrongSheet = wrongSheetRepo.findById(wrongsheetId)
+                .orElseThrow(() -> new RuntimeException("WrongSheet not found"));
+        File file = wrongSheet.getFile();
+        file.setFile_name(name);
+        fileRepo.save(file);
     }
 
     @Transactional

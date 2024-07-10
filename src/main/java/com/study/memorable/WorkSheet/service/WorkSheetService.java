@@ -10,6 +10,8 @@ import com.study.memorable.WorkSheet.entity.WorkSheet;
 import com.study.memorable.WorkSheet.repo.WorkSheetRepo;
 import com.study.memorable.OpenAI.controller.OpenAIController;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.SqlFragmentAlias;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WorkSheetService {
@@ -46,7 +49,7 @@ public class WorkSheetService {
         List<String> oddKeywords = getKeywordsByIndex(keywords, true);
         List<String> evenKeywords = getKeywordsByIndex(keywords, false);
 
-        // GPT API를 사용하여 키워드로부터 문제와 답을 생성
+        // GPT API -> 키워드로부터 문제와 답을 생성
         List<String> answer1 = generateAnswersFromKeywords(oddKeywords, file.getContent());
         List<String> answer2 = generateAnswersFromKeywords(evenKeywords, file.getContent());
 
@@ -68,9 +71,11 @@ public class WorkSheetService {
 
     private List<String> getKeywordsByIndex(List<String> keywords, boolean isOdd) {
         List<String> result = new ArrayList<>();
+        log.info("\n\n");
         for (int i = 0; i < keywords.size(); i++) {
             if ((i % 2 == 0 && !isOdd) || (i % 2 == 1 && isOdd)) {
                 result.add(keywords.get(i));
+                log.info("내가 뽑은 keywords: " + keywords.get(i));
             }
         }
         return result;
@@ -169,6 +174,15 @@ public class WorkSheetService {
         workSheetRepo.save(worksheet);
 
         return WorkSheetReadDTO.toFullDTO(worksheet);
+    }
+
+    @Transactional
+    public void updateFileName(Long worksheetId, String name) {
+        WorkSheet worksheet = workSheetRepo.findById(worksheetId)
+                .orElseThrow(() -> new RuntimeException("Worksheet not found"));
+        File file = worksheet.getFile();
+        file.setFile_name(name);
+        fileRepo.save(file);
     }
 
     @Transactional

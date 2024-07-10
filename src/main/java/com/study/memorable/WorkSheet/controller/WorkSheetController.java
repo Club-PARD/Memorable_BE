@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,6 +59,14 @@ public class WorkSheetController {
     public WorkSheetReadDTO makeWorksheet(@PathVariable Long worksheetId) {
         return workSheetService.makeWorksheet(worksheetId);
     }
+
+    @PatchMapping("/edit/{worksheetId}")
+    public String updateFileName(@PathVariable Long worksheetId, @RequestBody Map<String, String> request) {
+        String name = request.get("name");
+        workSheetService.updateFileName(worksheetId, name);
+        return "File NameUpdated!";
+    }
+
 
     @DeleteMapping("/{worksheetId}")
     public void deleteWorksheet(@PathVariable Long worksheetId) {

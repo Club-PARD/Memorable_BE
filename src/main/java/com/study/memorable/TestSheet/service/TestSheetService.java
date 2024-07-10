@@ -1,5 +1,6 @@
 package com.study.memorable.TestSheet.service;
 
+import com.study.memorable.File.repo.FileRepo;
 import com.study.memorable.TestSheet.dto.TestSheetDetailReadDTO;
 import com.study.memorable.TestSheet.dto.TestSheetReadDTO;
 import com.study.memorable.TestSheet.dto.TestSheetSimpleReadDTO;
@@ -14,7 +15,6 @@ import com.study.memorable.Questions.entity.Questions;
 import com.study.memorable.Questions.Repo.QuestionsRepo;
 import com.study.memorable.OpenAI.controller.OpenAIController;
 import com.study.memorable.File.entity.File;
-import com.study.memorable.File.repo.FileRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,8 +33,9 @@ public class TestSheetService {
     private final WorkSheetRepo workSheetRepo;
     private final QuestionsRepo questionsRepo;
     private final OpenAIController openAIController;
+    private final FileRepo fileRepo;
 
-    int len = 3;
+    int len = 20;
 
     @Transactional
     public TestSheetReadDTO createTestSheet(Long worksheetId) {
@@ -90,16 +91,18 @@ public class TestSheetService {
         TestSheet testSheet = testSheetRepo.findById(testsheetId)
                 .orElseThrow(() -> new RuntimeException("TestSheet not found"));
 
-        // Update isReExtracted
         testSheet.setReExtracted(userAnswersDTO.isReExtracted());
 
-        // Update isCompleteAllBlanks
         List<Boolean> currentIsCompleteAllBlanks = testSheet.getIsCompleteAllBlanks();
         List<Boolean> requestIsCompleteAllBlanks = userAnswersDTO.getIsCompleteAllBlanks();
 
+        // 1번째 시험지만 채점하는 경우
         boolean isUserAnswers1Complete = requestIsCompleteAllBlanks.get(0) && !currentIsCompleteAllBlanks.get(0);
+
+        // 2번째 시험지만 채점하는 경우
         boolean isUserAnswers2Complete = requestIsCompleteAllBlanks.get(1) && !currentIsCompleteAllBlanks.get(1);
 
+        // 둘다 채점 안 하고 건너뛰는 경우
         boolean isUserAnswers1Reverted = !requestIsCompleteAllBlanks.get(0) && currentIsCompleteAllBlanks.get(0);
         boolean isUserAnswers2Reverted = !requestIsCompleteAllBlanks.get(1) && currentIsCompleteAllBlanks.get(1);
 
@@ -148,12 +151,13 @@ public class TestSheetService {
         requestBody.put("answers", allAnswers);
         requestBody.put("userAnswers", allUserAnswers);
 
-        // Call the scoreAnswers API
-        Map<String, Object> scoringResult = openAIController.scoreAnswers(requestBody);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> scoringResult = (Map<String, Object>) openAIController.scoreAnswers(requestBody);
 
-        int scoreIndex = startIdx == 0 ? 0 : 1;
+        int scoreIndex = (startIdx == 0) ? 0 : 1;
         scoreList.set(scoreIndex, (Integer) scoringResult.get("score"));
 
+        @SuppressWarnings("unchecked")
         List<Boolean> tempIsCorrect = (List<Boolean>) scoringResult.get("isCorrect");
         for (int i = 0; i < tempIsCorrect.size(); i++) {
             isCorrectList.set(i + startIdx, tempIsCorrect.get(i));
@@ -186,7 +190,8 @@ public class TestSheetService {
 
 
     private Map<String, List<Questions>> generateAndSaveQuestions(List<String> keywords, File file) {
-        Map<String, List<String>> qaMap = processKeywordsWithService(keywords, file.getContent());
+        @SuppressWarnings("unchecked")
+        Map<String, List<String>> qaMap = (Map<String, List<String>>) processKeywordsWithService(keywords, file.getContent());
         return saveQuestions(qaMap, file);
     }
 
@@ -281,6 +286,15 @@ public class TestSheetService {
 
         // Return the updated details
         return TestSheetSimpleReadDTO.toSimpleDTO(testSheet);
+    }
+
+    @Transactional
+    public void updateFileName(Long testsheetId, String name) {
+        TestSheet testSheet = testSheetRepo.findById(testsheetId)
+                .orElseThrow(() -> new RuntimeException("TestSheet not found"));
+        File file = testSheet.getFile();
+        file.setFile_name(name);
+        fileRepo.save(file);
     }
 
     @Transactional

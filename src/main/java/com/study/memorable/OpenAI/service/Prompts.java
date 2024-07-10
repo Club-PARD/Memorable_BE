@@ -7,7 +7,7 @@ import java.util.List;
 @Slf4j
 public class Prompts {
 
-    static final int questions_num = 3;
+    static final int questions_num = 20;
     public static String extractKeywordsPrompt(int len, String text) {
         return String.format(
                 "### Situation ###\n" +

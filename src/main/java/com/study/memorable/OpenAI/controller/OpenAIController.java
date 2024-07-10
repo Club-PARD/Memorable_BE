@@ -23,13 +23,14 @@ public class OpenAIController {
     @PostMapping("/extract-keywords")
     public List<String> extractKeywordsFromContent(@RequestBody String text) {
         int textLengthWithoutSpaces = text.replace(" ", "").replace("\n", "").length();
-//        int len = (int) (textLengthWithoutSpaces * 0.03);
-        int len = 10; // 키워드 개수
+        int len = (int) (textLengthWithoutSpaces * 0.03);
+//        int len = 10; // 키워드 개수
         log.info("Text length without spaces: {}", len);
         return openAIService.extractKeywordsFromText(len, text);
     }
 
     @PostMapping("/process-keywords")
+    @SuppressWarnings("unchecked")
     public Map<String, List<String>> processKeywords(@RequestBody Map<String, Object> requestBody) {
         List<String> keywords = (List<String>) requestBody.get("keywords");
         String text = (String) requestBody.get("text");
@@ -37,6 +38,7 @@ public class OpenAIController {
     }
 
     @PostMapping("/score-answers")
+    @SuppressWarnings("unchecked")
     public Map<String, Object> scoreAnswers(@RequestBody Map<String, Object> requestBody) {
         String content = (String) requestBody.get("content");
         List<String> questions = (List<String>) requestBody.get("questions");
