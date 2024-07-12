@@ -1,0 +1,128 @@
+2024-07-11T01:00:42.129+09:00  INFO 87054 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : Starting MemorableApplicationTests using Java 17.0.10 with PID 87054 (started by oseongjin in /Users/oseongjin/Desktop/Memorable_testProject/memorable)
+2024-07-11T01:00:42.138+09:00  INFO 87054 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2024-07-11T01:00:43.356+09:00  INFO 87054 --- [memorable] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-11T01:00:43.506+09:00  INFO 87054 --- [memorable] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 136 ms. Found 7 JPA repository interfaces.
+2024-07-11T01:00:44.319+09:00  INFO 87054 --- [memorable] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-11T01:00:44.405+09:00  INFO 87054 --- [memorable] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-07-11T01:00:44.472+09:00  INFO 87054 --- [memorable] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-11T01:00:44.960+09:00  INFO 87054 --- [memorable] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-11T01:00:45.004+09:00  INFO 87054 --- [memorable] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-11T01:00:45.693+09:00  INFO 87054 --- [memorable] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@35ab4260
+2024-07-11T01:00:45.698+09:00  INFO 87054 --- [memorable] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-11T01:00:45.802+09:00  WARN 87054 --- [memorable] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-07-11T01:00:47.435+09:00  INFO 87054 --- [memorable] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-11T01:00:47.554+09:00 DEBUG 87054 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table file 
+       modify column content TEXT
+2024-07-11T01:00:47.639+09:00 DEBUG 87054 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table test_sheet 
+       modify column is_correct TEXT
+2024-07-11T01:00:47.676+09:00 DEBUG 87054 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table test_sheet 
+       modify column score VARCHAR(20)
+2024-07-11T01:00:47.711+09:00 DEBUG 87054 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table wrong_sheet 
+       modify column question_ids TEXT
+2024-07-11T01:00:48.149+09:00  INFO 87054 --- [memorable] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-11T01:00:48.875+09:00  INFO 87054 --- [memorable] [Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-07-11T01:00:49.963+09:00  WARN 87054 --- [memorable] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-11T01:00:50.682+09:00  INFO 87054 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : Started MemorableApplicationTests in 8.903 seconds (process running for 10.64)
+2024-07-11T01:00:51.359+09:00  INFO 87054 --- [memorable] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-11T01:00:51.361+09:00  INFO 87054 --- [memorable] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-11T01:00:51.375+09:00  INFO 87054 --- [memorable] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-11T01:33:46.456+09:00  INFO 87783 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : Starting MemorableApplicationTests using Java 17.0.10 with PID 87783 (started by oseongjin in /Users/oseongjin/Desktop/Memorable_testProject/memorable)
+2024-07-11T01:33:46.460+09:00  INFO 87783 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2024-07-11T01:33:47.551+09:00  INFO 87783 --- [memorable] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-11T01:33:47.643+09:00  INFO 87783 --- [memorable] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 81 ms. Found 7 JPA repository interfaces.
+2024-07-11T01:33:48.170+09:00  INFO 87783 --- [memorable] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-11T01:33:48.229+09:00  INFO 87783 --- [memorable] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-07-11T01:33:48.267+09:00  INFO 87783 --- [memorable] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-11T01:33:48.619+09:00  INFO 87783 --- [memorable] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-11T01:33:48.650+09:00  INFO 87783 --- [memorable] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-11T01:33:49.079+09:00  INFO 87783 --- [memorable] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@32b95de
+2024-07-11T01:33:49.082+09:00  INFO 87783 --- [memorable] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-11T01:33:49.207+09:00  WARN 87783 --- [memorable] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-07-11T01:33:50.461+09:00  INFO 87783 --- [memorable] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-11T01:33:50.573+09:00 DEBUG 87783 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table file 
+       modify column content TEXT
+2024-07-11T01:33:50.658+09:00 DEBUG 87783 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table test_sheet 
+       modify column is_correct TEXT
+2024-07-11T01:33:50.701+09:00 DEBUG 87783 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table test_sheet 
+       modify column score VARCHAR(20)
+2024-07-11T01:33:50.767+09:00 DEBUG 87783 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table wrong_sheet 
+       modify column question_ids TEXT
+2024-07-11T01:33:51.293+09:00  INFO 87783 --- [memorable] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-11T01:33:51.795+09:00  INFO 87783 --- [memorable] [Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-07-11T01:33:52.502+09:00  WARN 87783 --- [memorable] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-11T01:33:53.053+09:00  INFO 87783 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : Started MemorableApplicationTests in 6.967 seconds (process running for 8.986)
+2024-07-11T01:33:53.753+09:00  INFO 87783 --- [memorable] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-11T01:33:53.756+09:00  INFO 87783 --- [memorable] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-11T01:33:53.764+09:00  INFO 87783 --- [memorable] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-11T01:47:33.497+09:00  INFO 88307 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : Starting MemorableApplicationTests using Java 17.0.10 with PID 88307 (started by oseongjin in /Users/oseongjin/Desktop/Memorable_testProject/memorable)
+2024-07-11T01:47:33.500+09:00  INFO 88307 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2024-07-11T01:47:34.909+09:00  INFO 88307 --- [memorable] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-11T01:47:35.038+09:00  INFO 88307 --- [memorable] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 117 ms. Found 7 JPA repository interfaces.
+2024-07-11T01:47:35.886+09:00  INFO 88307 --- [memorable] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-11T01:47:36.007+09:00  INFO 88307 --- [memorable] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-07-11T01:47:36.089+09:00  INFO 88307 --- [memorable] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-11T01:47:36.626+09:00  INFO 88307 --- [memorable] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-11T01:47:36.672+09:00  INFO 88307 --- [memorable] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-11T01:47:37.081+09:00  INFO 88307 --- [memorable] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@165aa43a
+2024-07-11T01:47:37.084+09:00  INFO 88307 --- [memorable] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-11T01:47:37.180+09:00  WARN 88307 --- [memorable] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-07-11T01:47:38.802+09:00  INFO 88307 --- [memorable] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-11T01:47:38.919+09:00 DEBUG 88307 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table file 
+       modify column content TEXT
+2024-07-11T01:47:38.971+09:00 DEBUG 88307 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table test_sheet 
+       modify column is_correct TEXT
+2024-07-11T01:47:39.014+09:00 DEBUG 88307 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table test_sheet 
+       modify column score VARCHAR(20)
+2024-07-11T01:47:39.053+09:00 DEBUG 88307 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table wrong_sheet 
+       modify column question_ids TEXT
+2024-07-11T01:47:39.488+09:00  INFO 88307 --- [memorable] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-11T01:47:40.112+09:00  INFO 88307 --- [memorable] [Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-07-11T01:47:41.115+09:00  WARN 88307 --- [memorable] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-11T01:47:41.910+09:00  INFO 88307 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : Started MemorableApplicationTests in 8.832 seconds (process running for 10.582)
+2024-07-11T01:47:42.711+09:00  INFO 88307 --- [memorable] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-11T01:47:42.714+09:00  INFO 88307 --- [memorable] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-11T01:47:42.726+09:00  INFO 88307 --- [memorable] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-07-11T10:04:59.725+09:00  INFO 90253 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : Starting MemorableApplicationTests using Java 17.0.10 with PID 90253 (started by oseongjin in /Users/oseongjin/Desktop/Memorable_testProject/memorable)
+2024-07-11T10:04:59.727+09:00  INFO 90253 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2024-07-11T10:05:00.540+09:00  INFO 90253 --- [memorable] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-11T10:05:00.622+09:00  INFO 90253 --- [memorable] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 73 ms. Found 7 JPA repository interfaces.
+2024-07-11T10:05:01.114+09:00  INFO 90253 --- [memorable] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-11T10:05:01.171+09:00  INFO 90253 --- [memorable] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-07-11T10:05:01.214+09:00  INFO 90253 --- [memorable] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-11T10:05:01.542+09:00  INFO 90253 --- [memorable] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-11T10:05:01.578+09:00  INFO 90253 --- [memorable] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-11T10:05:01.985+09:00  INFO 90253 --- [memorable] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7d977a20
+2024-07-11T10:05:01.987+09:00  INFO 90253 --- [memorable] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-11T10:05:02.087+09:00  WARN 90253 --- [memorable] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-07-11T10:05:03.210+09:00  INFO 90253 --- [memorable] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-11T10:05:03.311+09:00 DEBUG 90253 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table file 
+       modify column content TEXT
+2024-07-11T10:05:03.410+09:00 DEBUG 90253 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table test_sheet 
+       modify column is_correct TEXT
+2024-07-11T10:05:03.452+09:00 DEBUG 90253 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table test_sheet 
+       modify column score VARCHAR(20)
+2024-07-11T10:05:03.507+09:00 DEBUG 90253 --- [memorable] [Test worker] org.hibernate.SQL                        : 
+    alter table wrong_sheet 
+       modify column question_ids TEXT
+2024-07-11T10:05:03.968+09:00  INFO 90253 --- [memorable] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-11T10:05:04.534+09:00  INFO 90253 --- [memorable] [Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-07-11T10:05:05.207+09:00  WARN 90253 --- [memorable] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-11T10:05:05.751+09:00  INFO 90253 --- [memorable] [Test worker] c.s.memorable.MemorableApplicationTests  : Started MemorableApplicationTests in 6.246 seconds (process running for 7.533)
+2024-07-11T10:05:06.338+09:00  INFO 90253 --- [memorable] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-11T10:05:06.340+09:00  INFO 90253 --- [memorable] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-07-11T10:05:06.352+09:00  INFO 90253 --- [memorable] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
