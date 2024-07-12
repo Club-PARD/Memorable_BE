@@ -35,8 +35,6 @@ public class WorkSheet {
     private LocalDateTime created_date;
     private LocalDateTime recent_date;
 
-    private String name;
-
     @ManyToOne
     @JoinColumn(name = "file_id")
     private File file;

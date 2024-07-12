@@ -43,23 +43,17 @@ public class TestSheetService {
                 .orElseThrow(() -> new RuntimeException("Worksheet not found"));
 
         File file = worksheet.getFile();
-        List<String> keywords = openAIController.extractKeywordsFromContent(file.getContent());
+        List<String> keywords = file.getKeyword();
 
-        List<String> oddKeywords = IntStream.range(0, keywords.size())
-                .filter(i -> i % 2 == 1)
-                .mapToObj(keywords::get)
-                .collect(Collectors.toList());
+        Collections.shuffle(keywords);  // Shuffle the keywords to ensure randomness
 
-        List<String> evenKeywords = IntStream.range(0, keywords.size())
-                .filter(i -> i % 2 == 0)
-                .mapToObj(keywords::get)
-                .collect(Collectors.toList());
+        int half = keywords.size() / 2;
 
-        Map<String, List<Questions>> firstQuestions = generateAndSaveQuestions(oddKeywords, file);
-        Map<String, List<Questions>> secondQuestions = generateAndSaveQuestions(evenKeywords, file);
+        List<String> firstKeywords = keywords.subList(0, half);
+        List<String> secondKeywords = keywords.subList(half, 2 * half);
 
-        log.info("First set of questions: {}", firstQuestions);
-        log.info("Second set of questions: {}", secondQuestions);
+        Map<String, List<Questions>> firstQuestions = generateAndSaveQuestions(firstKeywords, file);
+        Map<String, List<Questions>> secondQuestions = generateAndSaveQuestions(secondKeywords, file);
 
         List<QuestionsReadDTO> questions1 = firstQuestions.get("questions").stream()
                 .map(this::toQuestionsReadDTO)
@@ -69,17 +63,13 @@ public class TestSheetService {
                 .map(this::toQuestionsReadDTO)
                 .collect(Collectors.toList());
 
-        log.info("Converted first set of questions to DTO: {}", questions1);
-        log.info("Converted second set of questions to DTO: {}", questions2);
-
         TestSheet testSheet = TestSheet.builder()
                 .file(file)
                 .bookmark(false)
                 .isCompleteAllBlanks(Arrays.asList(false, false))
                 .created_date(LocalDateTime.now())
                 .score(Arrays.asList(0, 0))
-                .isCorrect(new ArrayList<>(Collections.nCopies((2*len), false)))
-//                .isCorrect(new ArrayList<>(Collections.nCopies(40, false)))
+                .isCorrect(new ArrayList<>(Collections.nCopies((2 * len), false)))
                 .build();
         testSheetRepo.save(testSheet);
 
@@ -112,7 +102,6 @@ public class TestSheetService {
 
         if (isUserAnswers2Complete) {
             processUserAnswers(testSheet, userAnswersDTO.getUserAnswers2(), len);
-//            processUserAnswers(testSheet, userAnswersDTO.getUserAnswers2(), 20);
         }
 
         if (isUserAnswers1Reverted || isUserAnswers2Reverted) {
@@ -154,14 +143,21 @@ public class TestSheetService {
         @SuppressWarnings("unchecked")
         Map<String, Object> scoringResult = (Map<String, Object>) openAIController.scoreAnswers(requestBody);
 
-        int scoreIndex = (startIdx == 0) ? 0 : 1;
-        scoreList.set(scoreIndex, (Integer) scoringResult.get("score"));
-
         @SuppressWarnings("unchecked")
         List<Boolean> tempIsCorrect = (List<Boolean>) scoringResult.get("isCorrect");
+
         for (int i = 0; i < tempIsCorrect.size(); i++) {
+            if (userAnswers.get(i) == null || userAnswers.get(i).isEmpty()) {
+                tempIsCorrect.set(i, false);
+            }
             isCorrectList.set(i + startIdx, tempIsCorrect.get(i));
         }
+
+        int correctCount = (int) tempIsCorrect.stream().filter(Boolean::booleanValue).count();
+        int scoreIndex = (startIdx == 0) ? 0 : 1;
+        scoreList.set(scoreIndex, correctCount);
+
+        log.info("\n\n\nscore 개수: " + scoreList + "\n\n\n");
 
         testSheet.setScore(scoreList);
         testSheet.setIsCorrect(isCorrectList);
@@ -171,7 +167,6 @@ public class TestSheetService {
         File file = testSheet.getFile();
         List<Questions> questions = questionsRepo.findByFile(file);
 
-//        for (int i = 0; i < 20; i++) {
         for (int i = 0; i < len; i++) {
             Questions question1 = questions.get(i);
             if (!requestIsCompleteAllBlanks.get(0)) {
@@ -179,7 +174,6 @@ public class TestSheetService {
             }
             questionsRepo.save(question1);
 
-//            Questions question2 = questions.get(i + 20);
             Questions question2 = questions.get(i + len);
             if (!requestIsCompleteAllBlanks.get(1)) {
                 question2.setUser_answers("");
@@ -187,7 +181,6 @@ public class TestSheetService {
             questionsRepo.save(question2);
         }
     }
-
 
     private Map<String, List<Questions>> generateAndSaveQuestions(List<String> keywords, File file) {
         @SuppressWarnings("unchecked")
@@ -235,16 +228,6 @@ public class TestSheetService {
         File file = testSheet.getFile();
         List<Questions> questions = questionsRepo.findByFile(file);
 
-//        List<QuestionsReadDTO> questions1 = questions.stream()
-//                .limit(20)
-//                .map(this::toQuestionsReadDTO)
-//                .collect(Collectors.toList());
-//
-//        List<QuestionsReadDTO> questions2 = questions.stream()
-//                .skip(20)
-//                .limit(20)
-//                .map(this::toQuestionsReadDTO)
-//                .collect(Collectors.toList());
         List<QuestionsReadDTO> questions1 = questions.stream()
                 .limit(len)
                 .map(this::toQuestionsReadDTO)

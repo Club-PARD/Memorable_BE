@@ -23,8 +23,8 @@ public class OpenAIController {
     @PostMapping("/extract-keywords")
     public List<String> extractKeywordsFromContent(@RequestBody String text) {
         int textLengthWithoutSpaces = text.replace(" ", "").replace("\n", "").length();
-        int len = (int) (textLengthWithoutSpaces * 0.03);
-//        int len = 10; // 키워드 개수
+//        int len = (int) (textLengthWithoutSpaces * 0.03);
+        int len = 40; // 키워드 개수
         log.info("Text length without spaces: {}", len);
         return openAIService.extractKeywordsFromText(len, text);
     }

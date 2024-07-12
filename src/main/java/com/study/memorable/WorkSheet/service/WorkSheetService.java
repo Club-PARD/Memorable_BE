@@ -33,16 +33,16 @@ public class WorkSheetService {
 
     @Transactional
     public WorkSheetReadDTO createWorkSheet(FileCreateDTO dto) {
-        User user = userRepo.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        log.info("Creating worksheet for userId: {}", dto.getUserId());
 
-        String content = dto.getContent().replace("\n", " ");
+        User user = userRepo.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + dto.getUserId()));
 
         File file = fileRepo.save(File.builder()
                 .file_name(dto.getName())
                 .category(dto.getCategory())
-                .content(content)
-                .keyword(openAIController.extractKeywordsFromContent(content))
+                .content(dto.getContent())
+                .keyword(openAIController.extractKeywordsFromContent(dto.getContent()))
                 .created_date(LocalDateTime.now())
                 .user(user)
                 .build());

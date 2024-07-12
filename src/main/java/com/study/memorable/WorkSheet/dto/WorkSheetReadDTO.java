@@ -1,6 +1,7 @@
 package com.study.memorable.WorkSheet.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.study.memorable.WorkSheet.entity.WorkSheet;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 @JsonPropertyOrder({ "worksheetId", "name", "category", "isCompleteAllBlanks", "isAddWorksheet", "isMakeTestSheet", "answer1", "answer2", "content" })
 public class WorkSheetReadDTO {
+
+    @JsonProperty("worksheetId")
     private Long worksheetId;
+
     private String name;
     private String category;
 

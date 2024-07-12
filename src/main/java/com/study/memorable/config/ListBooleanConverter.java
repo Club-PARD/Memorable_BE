@@ -25,7 +25,7 @@ public class ListBooleanConverter implements AttributeConverter<List<Boolean>, S
     public List<Boolean> convertToEntityAttribute(String dbData) {
         if (dbData == null || dbData.trim().isEmpty()) {
 //            return new ArrayList<>(Collections.nCopies(20, false));
-            return new ArrayList<>(Collections.nCopies(3, false));
+            return new ArrayList<>(Collections.nCopies(20, false));
         }
         return Arrays.stream(dbData.split("\\s*,\\s*"))
                 .map(Boolean::parseBoolean)

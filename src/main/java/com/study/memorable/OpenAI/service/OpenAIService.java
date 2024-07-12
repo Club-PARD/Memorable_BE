@@ -30,6 +30,9 @@ public class OpenAIService {
     }
 
     public List<String> extractKeywordsFromText(int len, String text) {
+        int contentLength = text.length();
+        log.info("Content length: {}", contentLength);
+
         String promptKeywords = Prompts.extractKeywordsPrompt(len, text);
 
         ChatGPTRequest request = new ChatGPTRequest(model, promptKeywords);
@@ -44,6 +47,7 @@ public class OpenAIService {
         log.info("Received response from OpenAI API for keywords: {}", response);
 
         assert response != null;
+
         return response.getChoices().stream()
                 .flatMap(choice -> extractKeywordsFromMessage(choice.getMessage().getContent()).stream())
                 .distinct()
@@ -52,7 +56,7 @@ public class OpenAIService {
     }
 
     public Map<String, List<String>> processKeywords(List<String> keywords, String text) {
-        String prompt = Prompts.buildPrompt(keywords, text);
+        String prompt = Prompts.buildTestSheetPrompt(keywords, text);
         String response = callOpenAI(prompt);
         log.info("Received response from OpenAI API for questions and answers: \n{}", response);
         return parseResponseToQuestionsAndAnswers(response);
@@ -130,13 +134,6 @@ public class OpenAIService {
         String[] parts = cleanedResponse.split("\\[|\\]");
         log.info("\n\n\n\nresult: " + Arrays.toString(parts));
 
-        // 첫 번째 부분을 score로 설정
-        result.put("score", Integer.parseInt(parts[0].trim().split(",")[0]));
-        log.info("parts[0]: " + parts[0]);
-
-        for(int i = 0; i < parts.length; i++)
-            log.info("parts: " + parts[i]);
-
         String[] boolValues = parts[1].split(", ");
         List<Boolean> isCorrectList = Arrays.stream(boolValues)
                 .map(Boolean::parseBoolean)
@@ -146,5 +143,4 @@ public class OpenAIService {
         log.info("isCorrectList: " + isCorrectList);
         return result;
     }
-
 }

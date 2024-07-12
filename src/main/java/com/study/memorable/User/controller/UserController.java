@@ -17,13 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("")
-    public ResponseEntity<String> create(@RequestBody UserCreateDTO dto) {
-        try {
-            userService.createUser(dto);
-            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public void create(@RequestBody UserCreateDTO dto) {
+        userService.createUser(dto);
     }
 
     @GetMapping("")
