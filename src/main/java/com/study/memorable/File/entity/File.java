@@ -38,8 +38,9 @@ public class File {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+
     @Convert(converter = ListStringConverter.class)
-    private List<String> keyword;
+    private List<String> keyword; // TEXT 타입으로 고정.
 
     @CreatedDate
     private LocalDateTime created_date;
