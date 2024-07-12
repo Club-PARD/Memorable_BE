@@ -36,7 +36,7 @@ public class Prompts {
         return String.format("### Situation ###\n" +
                     "You are a professor who created the provided text. Your role is to help students learn. You need to generate exam questions based on the text.\n" +
                     "### Instruction ###\n" +
-                    "Based on the provided text, generate 20 high-quality questions and answers.\n" +
+                    "Based on the provided text, generate 3 high-quality questions and answers.\n" +
                     "The purpose is to verify the understanding of the text by learners. Ensure that the questions and answers are of a difficulty level suitable for university and graduate students.\n" +
                     "The questions should not be obvious and must require reading the text to answer correctly.\n" +
                     "### Format ###\n" +
@@ -45,17 +45,17 @@ public class Prompts {
                     "### Guidelines ###\n" +
                     "1. Ensure the quality of questions and answers is excellent.\n" +
                     "2. Questions and answers should not include any additional explanations or comments not found in the text.\n" +
-                    "3. If the final generated questions and answers are not exactly 20, regenerate them until there are exactly 20. Do not return the result until exactly 20 questions and answers are created.\n" +
+                    "3. If the final generated questions and answers are not exactly 3, regenerate them until there are exactly 3. Do not return the result until exactly 3 questions and answers are created.\n" +
                     "4. Generate them as quickly as possible.\n" +
                     "5. Questions must start with Q: and answers with A: without any line breaks in between.\n" +
                     "ex. Q: [Question}\nA: {Answer]\nQ: [Question}\nA: {Answer]"+
-                    "**Final note: If the final generated questions and answers are not exactly 20, regenerate them until there are exactly 20. Do not return the result until exactly 20 questions and answers are created.**\n" +
+                    "**Final note: If the final generated questions and answers are not exactly 3, regenerate them until there are exactly 3. Do not return the result until exactly 3 questions and answers are created.**\n" +
                     "6. The text of the correct answer must never be included in the problem sentence.\n" +
-                    "7. 특정 문제 내의 그 어떤 단어도 정답이 되어서는 안돼!! 예를 들어 문제 1번에 답이 \"사과\"라면 1번 문제의 문장에는 절대 \"사과\"가 들어가면 안돼!\n"+
+                    "7. 특정 문제 내의 그 어떤 단어도 정답이 되어서는 안돼!! 예를 들어 문제 1번에 답이 \"사과\"라면 1번 문제의 문장에는 절대 \"사과\"가 들어가면 안돼!\n만약 문제 내에 정답 문자열이 포함되어 있다면 문제를 다시 생성해.\n"+
                     "8. \"네/아니오\"와 같은 정답을 요구하는 문제는 금지한다.\n" +
                     "10. 너무 뻔한 문제와 답은 안돼!그리고 \"~한 이유는 무엇인가?\"와 같이 문장 형식의 답을 요구하는 문제는 안돼.\nㄱn" +
                     "11. 문제에서 원하는 정답이 사람, 사상, 주제 등 많은 객체 중 무엇인지 정확하게 명시해야 해. 예를 들어, \"~에 해당하는 사상은 무엇인가?\"라는 질문에 정답이 사람이거나 다른 물체이면 잘못된 추출이야. 예를 들어 사상을 물어봤으면 택스트 내에 언급된 특정 사상이 정답이어야돼.\n" +
-                    "12. 제일 강조: 20개의 정답은 서로 절대 겹치면 안돼!!\n최종적으로 정답 중에 중복이 있으면 중복이 없을때까지 다시 추출해.\n" +
+                    "12. 제일 강조: 3개의 정답은 서로 절대 겹치면 안돼!!\n최종적으로 정답 중에 중복이 있으면 중복이 없을때까지 다시 추출해.\n" +
                     "**Ensure the quality of questions is excellent.**\n" +
                     "**Generate them as quickly as possible.**\n" +
                     "\n" +
@@ -67,7 +67,7 @@ public class Prompts {
     public static String scoreAnswersPrompt(String content, List<String> questions, List<String> answers, List<String> userAnswers) {
         StringBuilder prompt = new StringBuilder(String.format(
 //                "Please grade the following set of 20 questions and answers. " +
-                "Please grade the following set of 20 questions and answers. " +
+                "Please grade the following set of 3 questions and answers. " +
                         "Read the content and understand its context. " +
                         "Compare each answer and user answer against the content and questions. " +
                         "If the user's answer is similar to the actual answer based on the content and questions, mark it as correct. " +
@@ -81,7 +81,7 @@ public class Prompts {
             log.info("Q: "+questions.get(i)+"\nA: "+ answers.get(i) + "\nUser Answer: " + userAnswers.get(i));
             prompt.append(String.format("Q%d: %s\nA%d: %s\nUser Answer: %s\n\n", i + 1, questions.get(i), i+1, answers.get(i), userAnswers.get(i)));
         }
-        prompt.append("Return the results in the format <isCorrect> where isCorrect is a list of 20 boolean values.\n 다른 부연설명을 일체 하지 말고 정해진 형식만 출력해줘.");
+        prompt.append("Return the results in the format <isCorrect> where isCorrect is a list of 3 boolean values.\n 다른 부연설명을 일체 하지 말고 정해진 형식만 출력해줘.");
         prompt.append("\"사용자의 정답이 빈칸이면 무조건 오답으로 처리해.\\n\"");
         prompt.append("그리고 각 채점에 대해 왜 정답 처리를 했는지, 왜 오답 처리를 했는지 간단한 설명을 첨부해줘.");
         return prompt.toString();

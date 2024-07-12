@@ -35,7 +35,7 @@ public class TestSheetService {
     private final OpenAIController openAIController;
     private final FileRepo fileRepo;
 
-    int len = 20;
+    int len = 3;
 
     @Transactional
     public TestSheetReadDTO createTestSheet(Long worksheetId) {
@@ -45,7 +45,7 @@ public class TestSheetService {
         File file = worksheet.getFile();
         List<String> keywords = file.getKeyword();
 
-        Collections.shuffle(keywords);  // Shuffle the keywords to ensure randomness
+        Collections.shuffle(keywords);
 
         int half = keywords.size() / 2;
 

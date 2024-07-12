@@ -58,7 +58,7 @@ public class OpenAIService {
     public Map<String, List<String>> processKeywords(List<String> keywords, String text) {
         String prompt = Prompts.buildTestSheetPrompt(keywords, text);
         String response = callOpenAI(prompt);
-        log.info("Received response from OpenAI API for questions and answers: \n{}", response);
+        log.info("\nprocessKeywords() : Received response from OpenAI API for questions and answers: \n{}", response);
         return parseResponseToQuestionsAndAnswers(response);
     }
 
@@ -76,7 +76,7 @@ public class OpenAIService {
 
         HttpEntity<ChatGPTRequest> entity = new HttpEntity<>(request, headers);
 
-        log.info("Calling OpenAI API with prompt for questions and answers");
+        log.info("\ncallOpenAI(): Calling OpenAI API with prompt for questions and answers");
         ChatGPTResponse response = restTemplate.postForObject(apiURL, entity, ChatGPTResponse.class);
 
         assert response != null;

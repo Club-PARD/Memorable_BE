@@ -51,7 +51,7 @@ public class TestSheet {
     protected void onCreate() {
         if (this.isCorrect == null) {
 //            this.isCorrect = new ArrayList<>(Collections.nCopies(40, false));
-            this.isCorrect = new ArrayList<>(Collections.nCopies(40, false));
+            this.isCorrect = new ArrayList<>(Collections.nCopies(6, false));
         }
         if (this.score == null) {
             this.score = Arrays.asList(0, 0);
@@ -61,7 +61,7 @@ public class TestSheet {
     public List<Boolean> getIsCorrect() {
         if (this.isCorrect == null || this.isCorrect.isEmpty()) {
 //            return new ArrayList<>(Collections.nCopies(40, false));
-            return new ArrayList<>(Collections.nCopies(40, false));
+            return new ArrayList<>(Collections.nCopies(6, false));
         }
         return this.isCorrect;
     }
@@ -85,7 +85,7 @@ public class TestSheet {
                 .isReExtracted(dto.isReExtracted())
                 .isCompleteAllBlanks(dto.getIsCompleteAllBlanks())
                 .score(Arrays.asList(0, 0))
-                .isCorrect(new ArrayList<>(Collections.nCopies(40, false)))
+                .isCorrect(new ArrayList<>(Collections.nCopies(6, false)))
 //                .isCorrect(new ArrayList<>(Collections.nCopies(40, false)))
                 .build();
     }

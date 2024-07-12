@@ -53,7 +53,6 @@ public class WorkSheetService {
         List<String> oddKeywords = getKeywordsByIndex(keywords, true);
         List<String> evenKeywords = getKeywordsByIndex(keywords, false);
 
-        // GPT API -> 키워드로부터 문제와 답을 생성
         List<String> answer1 = generateAnswersFromKeywords(oddKeywords, file.getContent());
         List<String> answer2 = generateAnswersFromKeywords(evenKeywords, file.getContent());
 
