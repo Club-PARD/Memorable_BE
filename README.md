@@ -44,7 +44,7 @@ Learn more, Be memorable 당신의 기억에 남게
 <br/>
 
 ### ERD
-![img.png](img.png)
+![ERD](https://github.com/Club-PARD/Memorable_BE/blob/main/src/main/java/com/study/memorable/image/ERD.png?raw=true)
 
 ## 🌟 Memorable 주요 기능들
 <details>
