@@ -46,6 +46,8 @@ Learn more, Be memorable 당신의 기억에 남게
 ### ERD
 ![ERD](https://github.com/Club-PARD/Memorable_BE/blob/main/src/main/java/com/study/memorable/image/ERD.png?raw=true)
 
+<br/>
+
 ## 🌟 Memorable 주요 기능들
 <details>
   <summary><b>주요 기능</b></summary>
@@ -91,3 +93,10 @@ Learn more, Be memorable 당신의 기억에 남게
 
 <br/>
 
+---
+
+## 📝 Documentation
+
+- [API 명세서](https://decorous-fibre-672.notion.site/API-3b12ece603eb48aba0e57dd6385340c5?pvs=4)
+
+- [Memorable 소개 페이지](https://www.notion.so/_-3cda5068a4ce4e6493369142796557b4)

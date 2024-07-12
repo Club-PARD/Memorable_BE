@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -183,9 +182,25 @@ public class TestSheetService {
     }
 
     private Map<String, List<Questions>> generateAndSaveQuestions(List<String> keywords, File file) {
-        @SuppressWarnings("unchecked")
-        Map<String, List<String>> qaMap = (Map<String, List<String>>) processKeywordsWithService(keywords, file.getContent());
+        Map<String, List<String>> qaMap;
+        while (true) {
+            @SuppressWarnings("unchecked")
+            Map<String, List<String>> tempQaMap = (Map<String, List<String>>) processKeywordsWithService(keywords, file.getContent());
+            if (!isAnswerIncludedInQuestion(tempQaMap.get("questions"), tempQaMap.get("answers"))) {
+                qaMap = tempQaMap;
+                break;
+            }
+        }
         return saveQuestions(qaMap, file);
+    }
+
+    private boolean isAnswerIncludedInQuestion(List<String> questions, List<String> answers) {
+        for (int i = 0; i < questions.size(); i++) {
+            if (questions.get(i).contains(answers.get(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Map<String, List<Questions>> saveQuestions(Map<String, List<String>> qaMap, File file) {
