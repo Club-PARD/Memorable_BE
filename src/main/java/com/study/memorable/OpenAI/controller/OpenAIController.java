@@ -24,7 +24,7 @@ public class OpenAIController {
     public List<String> extractKeywordsFromContent(@RequestBody String text) {
         int textLengthWithoutSpaces = text.replace(" ", "").replace("\n", "").length();
         int len = (int) (textLengthWithoutSpaces * 0.03);
-        log.info("Text length without spaces: {}", len);
+        log.info("Keyword #: {}", len);
         return openAIService.extractKeywordsFromText(len, text);
     }
 

@@ -85,24 +85,26 @@ public class WorkSheetService {
 
     private List<String> generateAnswersFromKeywords(List<String> keywords, String content) {
         List<String> arr = new ArrayList<>();
-//        StringBuilder replacedText = new StringBuilder();
+        StringBuilder replacedText = new StringBuilder();
 
         String[] words = content.split("\\s+");
 
         for (String word : words) {
-//            boolean isKeyword = false;
+            boolean isKeyword = false;
             for (String key : keywords) {
-                if (word.contains(key)) {
-//                    replacedText.append(word.replace(key, "_____")).append(" ");
+                long count = arr.stream().filter(k -> k.equals(key)).count();
+                if (word.contains(key) && count < 4) {
+                    replacedText.append(word.replace(key, "_____")).append(" ");
                     arr.add(key);
-//                    isKeyword = true;
+                    isKeyword = true;
                     break;
                 }
             }
-//            if (!isKeyword) {
-//                replacedText.append(word).append(" ");
-//            }
+            if (!isKeyword) {
+                replacedText.append(word).append(" ");
+            }
         }
+        log.info("replacedText: " + replacedText);
 
         return arr;
     }
