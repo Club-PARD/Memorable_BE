@@ -71,32 +71,32 @@ public class File {
                 .build();
     }
 
-    public Map<String, Object> getOddIndexKeywords() {
-        if (keyword == null || keyword.isEmpty()) {
-            return Map.of();
-        }
-        List<String> oddKeywords = IntStream.range(0, keyword.size())
-                .filter(i -> i % 2 == 1)
-                .mapToObj(keyword::get)
-                .toList();
-        return Map.of("keywords", oddKeywords, "text", content);
-    }
+//    public Map<String, Object> getOddIndexKeywords() {
+//        if (keyword == null || keyword.isEmpty()) {
+//            return Map.of();
+//        }
+//        List<String> oddKeywords = IntStream.range(0, keyword.size())
+//                .filter(i -> i % 2 == 1)
+//                .mapToObj(keyword::get)
+//                .toList();
+//        return Map.of("keywords", oddKeywords, "text", content);
+//    }
+//
+//    public Map<String, Object> getEvenIndexKeywords() {
+//        if (keyword == null || keyword.isEmpty()) {
+//            return Map.of();
+//        }
+//        List<String> evenKeywords = IntStream.range(0, keyword.size())
+//                .filter(i -> i % 2 == 0)
+//                .mapToObj(keyword::get)
+//                .toList();
+//        return Map.of("keywords", evenKeywords, "text", content);
+//    }
 
-    public Map<String, Object> getEvenIndexKeywords() {
-        if (keyword == null || keyword.isEmpty()) {
-            return Map.of();
-        }
-        List<String> evenKeywords = IntStream.range(0, keyword.size())
-                .filter(i -> i % 2 == 0)
-                .mapToObj(keyword::get)
-                .toList();
-        return Map.of("keywords", evenKeywords, "text", content);
-    }
-
-    public void tests() {
-        Map<String, Object> oddKeywords = getOddIndexKeywords();
-        Map<String, Object> evenKeywords = getEvenIndexKeywords();
-        log.info("1: " + oddKeywords);
-        log.info("2: " + evenKeywords);
-    }
+//    public void tests() {
+//        Map<String, Object> oddKeywords = getOddIndexKeywords();
+//        Map<String, Object> evenKeywords = getEvenIndexKeywords();
+//        log.info("1: " + oddKeywords);
+//        log.info("2: " + evenKeywords);
+//    }
 }

@@ -47,8 +47,8 @@ public class FileService {
         fileRepo.deleteById(id);
     }
 
-    public void logOddIndexKeywords(Long fileId) {
-        File file = fileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File not found"));
-        file.tests(); // 호출
-    }
+//    public void logOddIndexKeywords(Long fileId) {
+//        File file = fileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File not found"));
+//        file.tests();
+//    }
 }

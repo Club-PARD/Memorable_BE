@@ -30,7 +30,8 @@ public class WrongSheetResponseDTO {
     }
 
     public static WrongSheetResponseDTO toDTO(WrongSheet wrongSheet) {
-        List<QuestionResponseDTO> questionResponseDTOs = wrongSheet.getWrongSheetQuestions().stream()
+        List<QuestionResponseDTO> questionResponseDTOs = wrongSheet.getWrongSheetQuestions()
+                .stream()
                 .map(wsq -> new QuestionResponseDTO(
                         wsq.getQuestion().getId(),
                         wsq.getQuestion().getQuestions(),

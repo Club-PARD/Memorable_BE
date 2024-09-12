@@ -29,11 +29,11 @@ public class FileController {
         return fileService.findFileById(id);
     }
 
-    @GetMapping("/logOddKeywords/{fileId}")
-    public String logOddIndexKeywords(@PathVariable Long fileId) {
-        fileService.logOddIndexKeywords(fileId);
-        return "키워드 2개로 나눠서 추출 성공!";
-    }
+//    @GetMapping("/logOddKeywords/{fileId}")
+//    public String logOddIndexKeywords(@PathVariable Long fileId) {
+//        fileService.logOddIndexKeywords(fileId);
+//        return "키워드 2개로 나눠서 추출 성공!";
+//    }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
