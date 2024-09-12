@@ -76,7 +76,6 @@ public class WorkSheetController {
         return ResponseEntity.ok(updatedWorksheet);
     }
 
-    // 7. Update recent date for a worksheet
     @PatchMapping("/recentDate/{worksheetId}") // 특정 worksheet의 recentDate 수정
     public ResponseEntity<WorkSheetReadDTO> updateRecentDate(@PathVariable Long worksheetId) {
         WorkSheetReadDTO updatedWorksheet = workSheetService.updateRecentDate(worksheetId);
