@@ -44,7 +44,7 @@ Learn more, Be memorable 당신의 기억에 남게
 <br/>
 
 ### ERD
-![ERD](https://github.com/Club-PARD/Memorable_BE/blob/main/src/main/java/com/study/memorable/image/ERD.png?raw=true)
+![ERD](https://github.com/Club-PARD/Memorable_BE/blob/main/src/main/resources/image/ERD.png?raw=true)
 
 <br/>
 
