@@ -11,7 +11,11 @@ import java.util.stream.Collectors;
 public class ListIntegerConverter implements AttributeConverter<List<Integer>, String> {
     @Override
     public String convertToDatabaseColumn(List<Integer> attribute) {
-        return attribute == null ? null : attribute.stream().map(String::valueOf).collect(Collectors.joining(","));
+        return attribute == null
+                ? null
+                : attribute.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
     }
 
     @Override
